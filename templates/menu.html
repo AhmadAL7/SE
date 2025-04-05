@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <!-- Link to the page-specific CSS file for the menu -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Welcome to the Restaurant</h1>
+    </header>
+
+    <!-- Navigation Section -->
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('reservations.reservations_creation') }}">Create Reservation</a></li>
+            <li><a href="{{ url_for('reservations.reservations_foh') }}">View Reservations (FOH)</a></li>
+            <li><a href="{{ url_for('notifications.notifications') }}">Notifications</a></li>
+            <li><a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a></li>
+        </ul>
+    </nav>
+
+    <!-- Menu Section -->
+    <section class="menu">
+        <h2>Our Menu</h2>
+        {% for item in menu_items %}
+        <div class="menu-item">
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description }}</p>
+            <span class="price">${{ item.price }}</span>
+        </div>
+        {% else %}
+        <p>No menu items available at the moment.</p>
+        {% endfor %}
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 Restaurant Inc. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
