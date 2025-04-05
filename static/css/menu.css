@@ -1,47 +1,113 @@
-/* menu.css */
-
-/* Header styles specific to menu page */
+/* Header styles specific to the menu page */
 header {
-    background-color: #4CAF50;
+    background-color: #222; /* Darker background for header */
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 40px;
+    font-size: 28px;
+    font-weight: bold;
 }
 
+/* Navigation bar at the top */
 nav {
-    text-align: center;
-    margin-top: 30px;
+    background-color: #222; /* Darker background for the navbar */
+    padding: 15px 0;
+    position: sticky; /* Keep the navigation bar at the top */
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* To ensure it stays on top */
 }
 
 nav ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
+    text-align: center;
 }
 
 nav ul li {
     display: inline-block;
-    margin: 0 15px;
+    margin: 0 25px;
 }
 
 nav ul li a {
     text-decoration: none;
-    color: #333;
+    color: #ffffff; /* Lighter color for links */
     font-size: 18px;
-    padding: 10px 20px;
-    border: 2px solid #4CAF50;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 8px;
+    background-color: #444; /* Darker background for links */
+    border: 2px solid #444;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 nav ul li a:hover {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #222221; /* Highlight on hover */
+
 }
 
-footer {
+/* Main Menu Section */
+.menu {
+    margin: 50px auto;
     text-align: center;
+}
+
+.menu h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Menu Item Style */
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     margin-top: 40px;
-    padding: 10px;
+}
+
+.menu-item {
     background-color: #333;
     color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-item:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.menu-item p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.menu-item .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #d69136;
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #222;
+    color: white;
+}
+body {
+    background-color: #7c7a70;   
 }

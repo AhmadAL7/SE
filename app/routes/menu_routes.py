@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 
-# Create a blueprint for  menu routes
-menu_bp = Blueprint('menu', __name__)
+# Create a blueprint for menu routes
+menu_bp = Blueprint('menu', __name__)  # Fixed: double underscores needed
 
 @menu_bp.route('/')
 def menu():
