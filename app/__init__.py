@@ -11,8 +11,13 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+    from app.routes.reservations_routes import reservations_bp
+    from app.routes.notifications_routes import notifications_bp
+    from app.routes.manager_routes import manager_bp
+    from app.routes.menu_routes import menu_bp
 
-    from app.routes import main
-    app.register_blueprint(main)
-
+    app.register_blueprint(reservations_bp)
+    app.register_blueprint(notifications_bp)
+    app.register_blueprint(manager_bp)
+    app.register_blueprint(menu_bp)
     return app
