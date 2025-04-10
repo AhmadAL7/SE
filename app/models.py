@@ -117,3 +117,10 @@ class StaffSchedule(db.Model):
     staff_id = db.Column(db.Integer, db.ForeignKey('staff.id'))
     shift_start = db.Column(db.DateTime)
     shift_end = db.Column(db.DateTime)
+
+class WebReservation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    date = db.Column(db.String(20), nullable=False)
+    time = db.Column(db.String(10), nullable=False)
+    guests = db.Column(db.Integer, nullable=False)
