@@ -2,12 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Requests (Manager)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #8B0000;
+        }
+
+        .request-container {
+            width: 85%;
+            margin: 30px auto;
+        }
+
+        .request-card {
+            background-color: #f9f9f9;
+            border-left: 6px solid #333;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+
+        .request-card p {
+            margin: 5px 0;
+        }
+
+        .actions {
+            margin-top: 10px;
+        }
+
+        .actions button {
+            padding: 5px 12px;
+            margin-right: 10px;
+            background-color: #444;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .actions button:hover {
+            background-color: #666;
+        }
+    </style>
 </head>
 <body>
-    <h1>Requests (Manager)</h1>
-    <!-- Your content goes here -->
+    <h1>Manager Requests</h1>
+
+    <div class="request-container">
+        <div class="request-card">
+            <p><strong>Staff:</strong> Emily Taylor</p>
+            <p><strong>Request:</strong> Time off</p>
+            <p><strong>Dates:</strong> 2025-04-20 to 2025-04-23</p>
+            <div class="actions">
+                <button>Approve</button>
+                <button>Deny</button>
+            </div>
+        </div>
+
+        <div class="request-card">
+            <p><strong>Staff:</strong> Daniel Harris</p>
+            <p><strong>Request:</strong> Shift Swap</p>
+            <p><strong>Details:</strong> Wants to swap Friday night with Lauren</p>
+            <div class="actions">
+                <button>Approve</button>
+                <button>Deny</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
