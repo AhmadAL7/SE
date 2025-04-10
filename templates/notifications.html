@@ -2,12 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Notifications</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: darkred;
+        }
+
+        .notifications-container {
+            width: 80%;
+            margin: 30px auto;
+        }
+
+        .notification {
+            background-color: #f5f5f5;
+            border-left: 5px solid #333;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 4px rgba(0,0,0,0.1);
+        }
+
+        .notification h3 {
+            margin: 0 0 5px;
+        }
+
+        .role-tag {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <h1>Notifications</h1>
-    <!-- Your content goes here -->
+
+    <div class="notifications-container">
+        <div class="notification">
+            <h3>New reservation added</h3>
+            <p class="role-tag">Visible to: FOH</p>
+        </div>
+
+        <div class="notification">
+            <h3>Inventory running low: Salmon fillet</h3>
+            <p class="role-tag">Visible to: BOH</p>
+        </div>
+
+        <div class="notification">
+            <h3>Shift change approved</h3>
+            <p class="role-tag">Visible to: Manager</p>
+        </div>
+    </div>
 </body>
 </html>

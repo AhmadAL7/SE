@@ -7,7 +7,26 @@
     <title>Reservations Creation</title>
 </head>
 <body>
-    <h1>Reservations Creation</h1>
-    <!-- Your content goes here -->
+    <h1 style="color: red;">Reservations Creation</h1>
+
+    {% if message %}
+        <p style="color: green;">{{ message }}</p>
+    {% endif %}
+
+    <form action="#" method="post">
+        <label for="name">Customer Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="date">Date:</label><br>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <label for="time">Time:</label><br>
+        <input type="time" id="time" name="time" required><br><br>
+
+        <label for="guests">Number of Guests:</label><br>
+        <input type="number" id="guests" name="guests" min="1" required><br><br>
+
+        <button type="submit">Book Reservation</button>
+    </form>
 </body>
 </html>

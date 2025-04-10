@@ -3,11 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Reservations (FOH)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #aaa;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Reservations (Front of House)</h1>
-    <!-- Your content goes here -->
+    <h1>Front of House - Reservation List</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Customer Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Guests</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- This will be replaced with dynamic content later -->
+            <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>2025-04-12</td>
+                <td>18:30</td>
+                <td>4</td>
+                <td>
+                    <button>Edit</button>
+                    <button>Cancel</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jane Smith</td>
+                <td>2025-04-13</td>
+                <td>19:00</td>
+                <td>2</td>
+                <td>
+                    <button>Edit</button>
+                    <button>Cancel</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
