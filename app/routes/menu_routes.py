@@ -18,7 +18,7 @@ def add_menu_item():
         description = request.form.get('description')
         price = float(request.form.get('price'))
 
-        MenuLogic.add_menu_item(price=price, description=description, inventory_id=inventory_id)
+        MenuLogic.add_menu_item(price, description,inventory_id)
         return redirect(url_for('menu.menu'))  # Redirect back to the menu page after adding item.
 
     # GET method - show form

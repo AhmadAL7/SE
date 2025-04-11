@@ -22,6 +22,9 @@
             <li><a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a></li>
             <li><a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a></li>
             <li><a href="{{ url_for('menu.menu') }}">Menu</a></li>
+            <li><a href="{{ url_for('auth.sign_in') }}">Sign in</a></li>
+            <li><a href="{{ url_for('auth.sign_up') }}">sign up</a></li>
+
         </ul>
     </nav>
     <form action="{{ url_for('menu.add_menu_item') }}" method="POST">

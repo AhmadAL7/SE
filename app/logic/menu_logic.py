@@ -12,11 +12,11 @@ class MenuLogic(BaseCRUD):
     @staticmethod
     def get_menu_item_by_id(menu_item_id):
         return BaseCRUD.get_by_id(MenuItem, menu_item_id)
-
+# pass the values from routes into the function to then be passed into the basecrud fucntion to create the row
     @staticmethod
     def add_menu_item(price, description, inventory_id):
         return BaseCRUD.create(MenuItem, price=price, description=description, inventory_id=inventory_id)
-
+# pass the values if there is any other wise have them as none(none does not update)
     @staticmethod
     def update_menu_item(menu_item_id, price=None, description=None, inventory_id=None):
         return BaseCRUD.update(MenuItem, menu_item_id, price=price, description=description, inventory_id=inventory_id)
