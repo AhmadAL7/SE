@@ -9,7 +9,12 @@ class BaseCRUD:
     @staticmethod
     def get_by_id(model, id):
         return model.query.get(id)
-
+    
+    @staticmethod
+    def get_id(model, **kwargs):
+        record = model.query.filter_by(**kwargs).first()
+        return record.id if record else None
+    
     @staticmethod
     def create(model, **kwargs):
         new_record = model(**kwargs)

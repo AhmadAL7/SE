@@ -6,14 +6,16 @@
     <title>Menu</title>
     <!-- Link to the page-specific CSS file for the menu -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu_add.css') }}">
+
 </head>
 <body>
 
+
+
     <!-- Navigation Section -->
     <nav>
-
-        <ul >
+        <ul>
             <li><a href="{{ url_for('reservations.reservations_creation') }}">Create Reservation</a></li>
             <li><a href="{{ url_for('reservations.reservations_foh') }}">View Reservations (FOH)</a></li>
             <li><a href="{{ url_for('notifications.notifications') }}">Notifications</a></li>
@@ -22,25 +24,27 @@
             <li><a href="{{ url_for('menu.menu') }}">Menu</a></li>
         </ul>
     </nav>
+    <form action="{{ url_for('menu.add_menu_item') }}" method="POST">
+        <label for="inventory">Choose Inventory:</label>
+        <select name="inventory_id" id="inventory">
+            {% for inventory in inventories %}
+            <option value="{{ inventory.id }}"><p>{{inventory.item_name}}</p></option>
+            {% endfor %}
+        </select>
 
-    <!-- Menu Section -->
-    <section class="menu">
-        <h2>Our Menu</h2>
-        {% for item in menu_items %}
-        <div class="menu-item">
-            <p>{{ item.description }}</p>
-            <span class="price">${{ item.price }}</span>
-        </div>
-        {% else %}
-        <p>No menu items available at the moment.</p>
-        {% endfor %}
-    </section>
-
+        <label for="description">Dish Name:</label>
+        <input type="text" name="description" id="description" required>
+    
+        <label for="price">Price:</label>
+        <input type="number" step="0.01" name="price" id="price" required>
+    
+        <button type="submit">Add Menu Item</button>
+    </form>
+    
     <!-- Footer Section -->
     <footer>
-        <p>All rights reserved.</p>
+        <p> All rights reserved.</p>
     </footer>
-
 
 </body>
 </html>
