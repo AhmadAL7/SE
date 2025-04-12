@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+<body>
+    <nav>
+
+        <ul>
+            <li><a href="{{ url_for('reservations.reservations_creation') }}">Create Reservation</a></li>
+            <li><a href="{{ url_for('reservations.reservations_foh') }}">View Reservations (FOH)</a></li>
+            <li><a href="{{ url_for('notifications.notifications') }}">Notifications</a></li>
+            <li><a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a></li>
+            <li><a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a></li>
+            <li><a href="{{ url_for('menu.menu') }}">Menu</a></li>
+            <li><a href="{{ url_for('auth.sign_in') }}">Sign in</a></li>
+            <li><a href="{{ url_for('auth.sign_up') }}">sign up</a></li>
+
+        </ul>
+    </nav>
+    <h1>Staff Profile</h1>
+    
+    <div class="staff-form-container">
+        <form action="{{ url_for('auth.get_profile') }}" method="POST" class="staff-form">
+            <!-- First Name -->
+            <label for="first_name">First Name:</label>
+            <input type="text" name="first_name" id="first_name" value="{{ staff_data.first_name if staff_data else '' }}" required><br>
+
+            <!-- Last Name -->
+            <label for="last_name">Last Name:</label>
+            <input type="text" name="last_name" id="last_name" value="{{ staff_data.last_name if staff_data else '' }}" required><br>
+
+            <!-- Phone Number -->
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" name="phone_number" id="phone_number" value="{{ staff_data.phone_number if staff_data else '' }}"required><br>
+
+            <!-- Email -->
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" value="{{ staff_data.email if staff_data else '' }}"required><br>
+
+            <!-- Username (Reads-only) -->
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="{{ user_data.username }}" readonly><br>
+            <!-- passworrd -->
+            <label for="password">Change Password? </label>
+            <input type="password" name="password" id="password" ><br>
+            
+            <button type="submit">
+                {{ 'Update' if staff_data else 'Create' }} Profile
+            </button>
+        </form>
+    </div>
+</body>
+
+</html>

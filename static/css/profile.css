@@ -1,0 +1,43 @@
+.staff-form-container {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+.staff-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+    background-color: #f9f9f9;
+    padding: 25px;
+    border-radius: 10px;
+  
+}
+
+.staff-form label {
+    font-weight: bold;
+}
+.staff-form input[type="text"],
+.staff-form input[type="email"] {
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+
+.staff-form button {
+    padding: 12px;
+    background-color: #4caf53;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.staff-form button:hover {
+    background-color: #45a049;
+}

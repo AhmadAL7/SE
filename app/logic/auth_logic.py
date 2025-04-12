@@ -1,3 +1,6 @@
+from datetime import datetime, timezone
+
+
 from app.models import User, Role, Permission, Staff
 from app.logic.base_crud import BaseCRUD
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,7 +18,7 @@ class AuthLogic(BaseCRUD):
         return BaseCRUD.get_all(Role)
     
     @staticmethod
-    def get_user():
+    def get_users():
         return BaseCRUD.get_all(Staff)
     
     @staticmethod
@@ -29,3 +32,45 @@ class AuthLogic(BaseCRUD):
         if BaseCRUD.get_row(User, username = username):
             return True
         return None
+    
+    @staticmethod
+    def get_user_record(username):
+        return BaseCRUD.get_row(User, username = username)
+    
+    @staticmethod
+    def get_staff_record(username):
+        
+        return BaseCRUD.get_row(Staff, user_id = username)
+    
+
+    @staticmethod
+    def add_staff(first_name, last_name, phone_number, email, user_id):
+        return BaseCRUD.create(
+            Staff,
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            email=email,
+            hire_date = datetime.now(timezone.utc),
+            user_id = user_id
+        
+        )
+        
+    @staticmethod
+    def update_staff(staff_id, first_name, last_name, phone_number, email):
+        return BaseCRUD.update(
+            Staff,
+            staff_id, 
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            email=email,
+  
+        )
+            
+            
+    @staticmethod
+    def change_password(id, new_password):
+        return BaseCRUD.update(User, id, password = new_password)
+    
+            

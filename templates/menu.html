@@ -20,10 +20,11 @@
             <li><a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a></li>
             <li><a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a></li>
             <li><a href="{{ url_for('menu.menu') }}">Menu</a></li>
-            {% if not session.get('user_id') %}
+            {% if not session.get('username') %} 
                 <li><a href="{{ url_for('auth.sign_in') }}">Sign in</a></li>
                 <li><a href="{{ url_for('auth.sign_up') }}">sign up</a></li>
             {% else %}
+                <li><a href="{{ url_for('auth.get_profile') }}">profile</a></li>
             {% endif %}
 
         </ul>

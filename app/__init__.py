@@ -6,7 +6,7 @@ from app.config import Config
 db = SQLAlchemy()
 
 def create_app():
-    # Explicitly set the templates folder path
+    
     app = Flask(__name__, 
                 template_folder=os.path.abspath('templates'),
                 static_folder=os.path.abspath('static'))
