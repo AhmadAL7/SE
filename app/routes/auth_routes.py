@@ -20,7 +20,7 @@ def sign_in():
         user = AuthLogic.authorize(username, password)
         if user:
             # add user id and username in the session
-            session['user_id'] = user.id
+            session['user_id'] = user.id   
             session['username'] = user.username
             flash('Login successful!', 'success')
             return redirect(url_for('menu.menu'))
@@ -46,9 +46,45 @@ def sign_up():
             flash('Username already taken. Please choose another one.', 'error')
             return redirect(url_for('auth.sign_up'))
         # create user
-        AuthLogic.create_user( username, password , role_id)
+        AuthLogic.create_user( username, encrypted_password , role_id)
         return redirect(url_for('auth.sign_in'))  
     # get roles for signing up 
     roles = AuthLogic.get_role()
     # view sign up page with roles
     return render_template('sign_up.html',  roles = roles)
+
+#profile
+@auth_bp.route('/profile', methods=['GET', 'POST'])
+def get_profile():
+    username = session.get('username')
+    user_id = session.get('user_id')
+    user = AuthLogic.get_user_record(username)
+    staff_data = user.staff  # using relationship in models
+    if request.method == 'POST':
+        # if staff exists
+        if staff_data:
+            new_password = request.form['password']
+            if new_password:
+                encrypted_password =AuthLogic.encrypt_password(new_password)
+                AuthLogic.change_password(user_id, encrypted_password)
+            AuthLogic.update_staff(
+                staff_id=staff_data.id,
+                first_name=request.form['first_name'],
+                last_name=request.form['last_name'],
+                phone_number=request.form['phone_number'],
+                email=request.form['email']
+            )
+            return redirect(url_for('auth.get_profile'))
+        # add record for staff
+        AuthLogic.add_staff(
+        first_name=request.form['first_name'],
+        last_name=request.form['last_name'],
+        phone_number=request.form['phone_number'],
+        email=request.form['email'],
+        user_id = user_id
+        )  
+
+ 
+    return render_template('profile.html',  user_data=user, staff_data=staff_data)
+
+
