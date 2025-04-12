@@ -1,26 +1,24 @@
-.staff-form-container {
+form-container {
     display: flex;
     justify-content: center;
     padding: 30px;
+
 }
 
-.staff-form {
+form {
     display: flex;
     flex-direction: column;
     gap: 15px;
     width: 100%;
-    max-width: 400px;
+
     background-color: #f9f9f9;
     padding: 25px;
     border-radius: 10px;
   
 }
 
-.staff-form label {
-    font-weight: bold;
-}
-.staff-form input[type="text"],
-.staff-form input[type="email"] {
+
+form input {
     padding: 10px;
     border: 1px solid #000000;
     border-radius: 6px;
@@ -28,7 +26,7 @@
 }
 
 
-.staff-form button {
+form button {
     padding: 12px;
     background-color: #4caf53;
     color: white;
@@ -37,7 +35,18 @@
     cursor: pointer;
     font-size: 16px;
 }
-
-.staff-form button:hover {
+form button:hover {
     background-color: #45a049;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.inventory-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }

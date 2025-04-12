@@ -83,7 +83,7 @@ def get_profile():
         email=request.form['email'],
         user_id = user_id
         )  
-        # staff_data = AuthLogic.get_staff_record(username)
+
  
     return render_template('profile.html',  user_data=user, staff_data=staff_data)
 

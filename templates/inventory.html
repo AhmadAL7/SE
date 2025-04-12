@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
-    <!-- Link to the page-specific CSS file for the menu -->
+    <title>Inventory Management</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 <body>
-
-    <!-- Navigation Section -->
     <nav>
-
-        <ul >
+        <ul>
             <li><a href="{{ url_for('reservations.reservations_creation') }}">Create Reservation</a></li>
             <li><a href="{{ url_for('reservations.reservations_foh') }}">View Reservations (FOH)</a></li>
             <li><a href="{{ url_for('notifications.notifications') }}">Notifications</a></li>
@@ -27,28 +23,31 @@
             {% else %}
                 <li><a href="{{ url_for('auth.get_profile') }}">profile</a></li>
             {% endif %}
-
         </ul>
     </nav>
 
-    <!-- Menu Section -->
-    <section class="menu">
-        <h2>Our Menu</h2>
-        {% for item in menu_items %}
-        <div class="menu-item">
-            <p>{{ item.description }}</p>
-            <span class="price">${{ item.price }}</span>
+    <section class="inventory">
+        <h2>Inventory Management</h2>
+        {% for item in inventory_items %}
+        <div class="inventory-item">
+            <form action="{{ url_for('inventory.update_inventory_item', item_id=item.id) }}" method="POST">
+                <label>Item Name:</label>
+                <input type="text" name="item_name" value="{{ item.item_name }}" required>
+                
+                <label>Quantity:</label>
+                <input type="number" name="quantity" value="{{ item.quantity }}" required>
+                
+                <label>Supplier:</label>
+                <input type="text" value="{{ item.supplier.name }}" readonly>
+                
+                <button type="submit">Update</button>
+            </form>
         </div>
-        {% else %}
-        <p>No menu items available at the moment.</p>
         {% endfor %}
     </section>
 
-    <!-- Footer Section -->
     <footer>
         <p>All rights reserved.</p>
     </footer>
-
-
 </body>
 </html>
