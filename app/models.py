@@ -124,3 +124,9 @@ class WebReservation(db.Model):
     date = db.Column(db.String(20), nullable=False)
     time = db.Column(db.String(10), nullable=False)
     guests = db.Column(db.Integer, nullable=False)
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(50), nullable=False)  # 'FOH', 'BOH', or 'Manager'
+    timestamp = db.Column(db.DateTime)

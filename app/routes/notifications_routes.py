@@ -1,8 +1,10 @@
+# app/routes/notifications_routes.py
 from flask import Blueprint, render_template
+from app.logic.notification_logic import NotificationLogic
 
-# Create a blueprint for notifications routes
 notifications_bp = Blueprint('notifications', __name__)
 
 @notifications_bp.route('/notifications')
 def notifications():
-    return render_template('notifications.html')
+    all_notifications = NotificationLogic.get_all_notifications()
+    return render_template('notifications.html', notifications=all_notifications)

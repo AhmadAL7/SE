@@ -42,20 +42,17 @@
     <h1>Notifications</h1>
 
     <div class="notifications-container">
+        {% for note in notifications %}
         <div class="notification">
-            <h3>New reservation added</h3>
-            <p class="role-tag">Visible to: FOH</p>
+            <h3>{{ note.message }}</h3>
+            <p class="role-tag">Visible to: {{ note.role }}</p>
+            {% if note.timestamp %}
+            <p class="role-tag">Time: {{ note.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+            {% endif %}
         </div>
-
-        <div class="notification">
-            <h3>Inventory running low: Salmon fillet</h3>
-            <p class="role-tag">Visible to: BOH</p>
-        </div>
-
-        <div class="notification">
-            <h3>Shift change approved</h3>
-            <p class="role-tag">Visible to: Manager</p>
-        </div>
+        {% else %}
+        <p style="text-align: center;">No notifications available.</p>
+        {% endfor %}
     </div>
 </body>
 </html>
