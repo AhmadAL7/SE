@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template
+# app/routes/manager_routes.py
+from flask import render_template, Blueprint
+from app.logic.manager_requests_logic import ManagerRequestLogic
 
-# Create a blueprint for manager-related routes
 manager_bp = Blueprint('manager', __name__)
 
 @manager_bp.route('/requests/manager')
 def requests_manager():
-    return render_template('requests_manager.html')
+    requests = ManagerRequestLogic.get_all_requests()
+    return render_template('requests_manager.html', requests=requests)
