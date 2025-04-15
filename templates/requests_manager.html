@@ -50,25 +50,20 @@
     <h1>Manager Requests</h1>
 
     <div class="request-container">
+        {% for req in requests %}
         <div class="request-card">
-            <p><strong>Staff:</strong> Emily Taylor</p>
-            <p><strong>Request:</strong> Time off</p>
-            <p><strong>Dates:</strong> 2025-04-20 to 2025-04-23</p>
+            <p><strong>Staff ID:</strong> {{ req.staff_id }}</p>
+            <p><strong>Request:</strong> {{ req.reason }}</p>
+            <p><strong>Dates:</strong> {{ req.request_start.date() }} to {{ req.request_end.date() }}</p>
+            <p><strong>Status:</strong> {{ req.status }}</p>
             <div class="actions">
                 <button>Approve</button>
                 <button>Deny</button>
             </div>
         </div>
-
-        <div class="request-card">
-            <p><strong>Staff:</strong> Daniel Harris</p>
-            <p><strong>Request:</strong> Shift Swap</p>
-            <p><strong>Details:</strong> Wants to swap Friday night with Lauren</p>
-            <div class="actions">
-                <button>Approve</button>
-                <button>Deny</button>
-            </div>
-        </div>
+        {% else %}
+        <p>No requests found.</p>
+        {% endfor %}
     </div>
 </body>
 </html>

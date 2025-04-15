@@ -9,13 +9,11 @@ reservations_bp = Blueprint('reservations', __name__)
 @reservations_bp.route('/reservations/create', methods=['GET', 'POST'])
 def reservations_creation():
     if request.method == 'POST':
-        # Delegate form processing to logic class
         ReservationLogic.create_reservation(request.form)
         return render_template('reservations_creation.html', message="Reservation submitted!")
-
     return render_template('reservations_creation.html')
-
 
 @reservations_bp.route('/reservations/foh')
 def reservations_foh():
-    return render_template('reservations_foh.html')
+    reservations = ReservationLogic.get_all_reservations()
+    return render_template('reservations_foh.html', reservations=reservations)
