@@ -1,5 +1,3 @@
-# app/routes/reservations_routes.py
-
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.logic.reservation_logic import ReservationLogic
 
@@ -20,7 +18,6 @@ def reservations_foh():
 @reservations_bp.route('/reservations/edit/<int:id>', methods=['GET', 'POST'])
 def edit_reservation(id):
     reservation = ReservationLogic.get_reservation_by_id(id)
-
     if not reservation:
         return "Reservation not found", 404
 

@@ -1,5 +1,3 @@
-# app/logic/reservation_logic.py
-
 from app.models import Reservation, TableModel, Customer
 from app.logic.base_crud import BaseCRUD
 from app import db
@@ -49,16 +47,34 @@ class ReservationLogic(BaseCRUD):
         if not reservation:
             return None, "Reservation not found."
 
-        new_guest_count = int(form_data.get('guests'))
-        new_name = form_data.get('name')  # Placeholder, not stored yet
+        try:
+            new_guest_count = int(form_data.get('guests'))
+            new_date = form_data.get('date')
+            new_time = form_data.get('time')
+            new_datetime = datetime.strptime(f"{new_date} {new_time}", "%Y-%m-%d %H:%M")
 
+            new_first_name = form_data.get('first_name')
+            new_last_name = form_data.get('last_name')
+
+        except Exception:
+            return None, "Invalid input."
+
+        # Validate table capacity
         table = TableModel.query.get(reservation.table_id)
         if table and new_guest_count > table.seats:
             return None, f"Table {table.table_number} can only seat {table.seats} guests."
 
+        # Update reservation
         reservation.number_of_people = new_guest_count
+        reservation.reservation_time = new_datetime
+
+        # Update customer name
+        if reservation.customer:
+            reservation.customer.first_name = new_first_name
+            reservation.customer.last_name = new_last_name
+
         db.session.commit()
-        return reservation, "Reservation updated successfully."
+        return reservation, "Reservation and customer updated successfully."
 
     @staticmethod
     def delete_reservation(reservation_id):
