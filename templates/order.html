@@ -1,16 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu</title>
-    <!-- Link to the page-specific CSS file for the menu -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/order.css') }}">
+
 </head>
 <body>
 
-    <!-- Navigation Section -->
+
     <nav>
 
         <ul >
@@ -20,7 +22,6 @@
             <li><a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a></li>
             <li><a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a></li>
             <li><a href="{{ url_for('menu.menu') }}">Menu</a></li>
-            <li><a href="{{ url_for('order.view_tables') }}">Tables</a></li>
             <li><a href="{{ url_for('inventory.inventory') }}">Inventory</a></li>
             {% if not session.get('username') %} 
                 <li><a href="{{ url_for('auth.sign_in') }}">Sign in</a></li>
@@ -32,20 +33,32 @@
         </ul>
     </nav>
 
-    <!-- Menu Section -->
-    <section class="menu">
-        <h2>Our Menu</h2>
-        {% for item in menu_items %}
-        <div class="menu-item">
-            <p>{{ item.description }}</p>
-            <span class="price">${{ item.price }}</span>
-        </div>
-        {% else %}
-        <p>No menu items available at the moment.</p>
-        {% endfor %}
-    </section>
+    <h2 class="order-title">Table {{ table_number }} </h2>
+    <h2 class="order-title"> Order {{ order_id }}</h2>
 
-    <!-- Footer Section -->
+        <h3>Order Items</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in menu_items %}
+                <tr>
+                    <td>{{ item.Item_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+
+
     <footer>
         <p>All rights reserved.</p>
     </footer>

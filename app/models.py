@@ -96,6 +96,8 @@ class OrderMenuItem(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), primary_key=True)
     menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_item.id'), primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
+    menu = db.relationship('MenuItem', backref='order_links')
+
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
