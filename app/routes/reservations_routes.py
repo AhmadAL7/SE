@@ -6,8 +6,11 @@ reservations_bp = Blueprint('reservations', __name__)
 @reservations_bp.route('/reservations/create', methods=['GET', 'POST'])
 def reservations_creation():
     if request.method == 'POST':
-        ReservationLogic.create_reservation(request.form)
-        return render_template('reservations_creation.html', message="Reservation submitted!")
+        try:
+            ReservationLogic.create_reservation(request.form)
+            return render_template('reservations_creation.html', message="Reservation booked successfully!")
+        except ValueError as e:
+            return render_template('reservations_creation.html', error=str(e))
     return render_template('reservations_creation.html')
 
 @reservations_bp.route('/reservations/foh')

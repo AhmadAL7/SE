@@ -10,24 +10,64 @@ class ReservationLogic(BaseCRUD):
     @staticmethod
     def create_reservation(form_data):
         name = form_data.get('name')
+        email = form_data.get('email')
+        phone = form_data.get('phone')
         date = form_data.get('date')
         time = form_data.get('time')
-        guests = form_data.get('guests')
+        guests = int(form_data.get('guests'))
 
-        print(f"[LOGIC] New Reservation Submitted:")
-        print(f"Name: {name}, Date: {date}, Time: {time}, Guests: {guests}")
+        print(f"[LOGIC] Reservation Attempt: {name} | {email} | {phone} | {date} {time} | {guests} guests")
 
         reservation_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
-        dummy_customer_id = 1
-        dummy_table_id = 1
 
-        return BaseCRUD.create(
-            Reservation,
-            customer_id=dummy_customer_id,
-            reservation_time=reservation_datetime,
-            number_of_people=guests,
-            table_id=dummy_table_id
-        )
+        # Parse name into first and last
+        parts = name.strip().split()
+        first_name = parts[0]
+        last_name = parts[1] if len(parts) > 1 else ""
+
+        # Match full identity
+        customer = Customer.query.filter_by(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone_number=phone
+        ).first()
+
+        if not customer:
+            customer = Customer(
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                phone_number=phone
+            )
+            db.session.add(customer)
+            db.session.commit()
+
+        # ❌ Block if same customer already booked at this time
+        existing_booking = Reservation.query.filter_by(
+            customer_id=customer.id,
+            reservation_time=reservation_datetime
+        ).first()
+        if existing_booking:
+            raise ValueError("You already have a reservation at this time.")
+
+        # ✅ Find available table
+        suitable_tables = TableModel.query.filter(TableModel.seats >= guests).all()
+        for table in suitable_tables:
+            conflict = Reservation.query.filter_by(
+                reservation_time=reservation_datetime,
+                table_id=table.id
+            ).first()
+            if not conflict:
+                return BaseCRUD.create(
+                    Reservation,
+                    customer_id=customer.id,
+                    reservation_time=reservation_datetime,
+                    number_of_people=guests,
+                    table_id=table.id
+                )
+
+        raise ValueError("No available tables for that time and guest count.")
 
     @staticmethod
     def get_all_reservations():
