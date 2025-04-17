@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +8,8 @@
     <title>Menu</title>
     <!-- Link to the page-specific CSS file for the menu -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/order.css') }}">
+
 </head>
 <body>
 
@@ -32,20 +35,13 @@
         </ul>
     </nav>
 
-    <!-- Menu Section -->
-    <section class="menu">
-        <h2>Our Menu</h2>
-        {% for item in menu_items %}
-        <div class="menu-item">
-            <p>{{ item.description }}</p>
-            <span class="price">${{ item.price }}</span>
-        </div>
-        {% else %}
-        <p>No menu items available at the moment.</p>
-        {% endfor %}
-    </section>
-
-    <!-- Footer Section -->
+<!-- templates/tablesview.html -->
+<h2>Select a Table</h2>
+<ul>
+    {% for table in tables %}
+    <li><a href="{{ url_for('order.table_order', table_id=table.id) }}">Table {{ table.table_number }}</a></li>
+    {% endfor %}
+</ul>
     <footer>
         <p>All rights reserved.</p>
     </footer>

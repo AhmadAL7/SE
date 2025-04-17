@@ -19,11 +19,13 @@ def create_app():
     from app.routes.menu_routes import menu_bp
     from app.routes.auth_routes import auth_bp
     from app.routes.inventory_routes import inventory_bp
-    
+    from app.routes.order_routes import order_bp
+      
     app.register_blueprint(reservations_bp)
     app.register_blueprint(notifications_bp)
     app.register_blueprint(manager_bp)
     app.register_blueprint(menu_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(inventory_bp)
+    app.register_blueprint(order_bp)
     return app

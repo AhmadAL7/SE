@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash
 
 app = create_app()
 with app.app_context():
-    # Clear existing data (if needed)
+    # Clear existing data 
     db.session.query(StaffSchedule).delete()
     db.session.query(RequestTimeOff).delete()
     db.session.query(Payment).delete()
