@@ -31,7 +31,7 @@
         <label for="inventory">Choose Inventory:</label>
         <select name="inventory_id" id="inventory">
             {% for inventory in inventories %}
-            <option value="{{ inventory.id }}"><p>{{inventory.item_name}}</p></option>
+            <option value="{{ inventory.id }}">{{inventory.item_name}}</option>
             {% endfor %}
         </select>
 

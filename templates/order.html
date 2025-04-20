@@ -51,13 +51,37 @@
                     <td>{{ item.Item_name }}</td>
                     <td>{{ item.quantity }}</td>
                     <td>${{ item.price }}</td>
+                    <td>
+                <!-- Decrease quantity -->
+                <form method="POST" action="{{ url_for('order.decrease_quantity', table_id=table_id, menu_item_id=item.id) }}" style="display: inline;">
+                    <button type="submit">➖</button>
+                </form>
+
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-
-
+        
+        <form method="POST" action="{{ url_for('order.remove_order', table_id=table_id) }}" style="display: inline;">
+            <button type="submit">❌</button>
+        </form>
+        <h4>Total: ${{ total_price }}</h4>
+        <h3>Add Menu Item</h3>
+        <form method="POST" action="{{ url_for('order.add_to_order', table_id=table_id) }}">
+            <label for="menu_item_id">Select Item:</label>
+            <select name="menu_item_id" required>
+                {% for item in all_menu_items %}
+                <option value="{{ item.id }}">{{ item.description }} - ${{ item.price }}</option>
+                {% endfor %}
+            </select>
+        
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" value="1" min="1" required>
+        
+            <button type="submit">Add to Order</button>
+        </form>
+        
 
     <footer>
         <p>All rights reserved.</p>
