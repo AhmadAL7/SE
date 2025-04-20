@@ -93,8 +93,9 @@ class Order(db.Model):
     menu_items = db.relationship('OrderMenuItem', backref='order', lazy=True)
 
 class OrderMenuItem(db.Model):
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), primary_key=True)
-    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_item.id'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
+    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_item.id'))
     quantity = db.Column(db.Integer, nullable=False)
     menu = db.relationship('MenuItem', backref='order_links')
 
