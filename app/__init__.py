@@ -16,6 +16,7 @@ def create_app():
     app.config.from_object(Config)
     socketio.init_app(app)   
     db.init_app(app) # link the db 
+    # inner imports as db is required by these routes so it has to be defined first
     from app.routes.reservations_routes import reservations_bp
     from app.routes.notifications_routes import notifications_bp
     from app.routes.manager_routes import manager_bp
@@ -23,7 +24,9 @@ def create_app():
     from app.routes.auth_routes import auth_bp
     from app.routes.inventory_routes import inventory_bp
     from app.routes.order_routes import order_bp
-      
+    from app.routes.payment_routes import payment_bp
+    
+    app.register_blueprint(payment_bp)
     app.register_blueprint(reservations_bp)
     app.register_blueprint(notifications_bp)
     app.register_blueprint(manager_bp)

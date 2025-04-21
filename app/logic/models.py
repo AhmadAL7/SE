@@ -49,7 +49,7 @@ class TableModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     table_number = db.Column(db.Integer, unique=True, nullable=False)
     seats = db.Column(db.Integer, nullable=False)
-    orders = db.relationship("Order", backref="table")
+
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
@@ -121,6 +121,12 @@ class StaffSchedule(db.Model):
     shift_start = db.Column(db.DateTime)
     shift_end = db.Column(db.DateTime)
 
+class WebReservation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    date = db.Column(db.String(20), nullable=False)
+    time = db.Column(db.String(10), nullable=False)
+    guests = db.Column(db.Integer, nullable=False)
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
