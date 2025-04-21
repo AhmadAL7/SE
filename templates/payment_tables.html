@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Table for Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Select a Table</h2>
+        <ul>
+            {% for t in tables %}
+                <li>
+                    Table {{ t.table_number }} – ${{ t.total_price }}
+                    <a href="{{ url_for('payment.process_payment', table_id=t.table_id) }}">View & Pay</a>
+                </li>
+            {% endfor %}
+        </ul>
+        
+    </div>
+</body>
+</html>

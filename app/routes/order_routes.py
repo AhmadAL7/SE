@@ -4,7 +4,9 @@ from app.logic.order_logic import OrderLogic
 from app.logic.base_crud import BaseCRUD
 from app.models import TableModel
 from app.logic.menu_logic import MenuLogic
-
+from app.logic.kitchen import KitchenLogic
+from app import socketio
+from flask import jsonify 
 order_bp = Blueprint('order', __name__)
 
 
@@ -66,3 +68,24 @@ def decrease_quantity(table_id, menu_item_id):
         return redirect(url_for('order.view_tables'))
         
     return redirect(url_for('order.table_order', table_id=table_id))
+
+#Kichen
+@order_bp.route('/kitchen')
+def kitchen_view():
+    from app.models import Order
+    orders = KitchenLogic.get_kitchen_orders()
+    return render_template('kitchen.html', orders=orders)
+
+
+@order_bp.route('/mark_done/<int:order_id>', methods=['POST'])
+def mark_order_done(order_id):
+    KitchenLogic.mark_order_done(order_id)
+
+    return redirect(url_for('order.kitchen_view'))
+
+@order_bp.route('/kitchen/orders/json')
+def kitchen_orders_json():
+    details = KitchenLogic.get_order_json()
+    return jsonify(details)
+
+

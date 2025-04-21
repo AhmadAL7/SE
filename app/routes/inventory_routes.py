@@ -1,7 +1,7 @@
 
 from app.logic.Inventory import InventoryLogic
 from flask import render_template, request, redirect, url_for,Blueprint
-from app import db
+
 
 inventory_bp = Blueprint('inventory', __name__)
 

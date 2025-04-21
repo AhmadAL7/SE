@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitchen Orders</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/kitchen.css') }}">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+</head>
+
+    <body>
+        <div id="app">
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('order.view_tables') }}">Tables</a></li>
+                    <li><a href="{{ url_for('menu.menu') }}">Menu</a></li>
+                    <li><a href="{{ url_for('inventory.inventory') }}">Inventory</a></li>
+                    <li><a href="{{ url_for('notifications.notifications') }}">Notifications</a></li>
+                </ul>
+            </nav>
+    
+            <div class="container">
+                <h2>Kitchen Orders</h2>
+                <p v-if="orders.length === 0">No orders currently in progress.</p>
+                 <!--to avoid jinja conflict with vue syntax-->
+                {% raw %} 
+                <div v-for="order in orders" :key="order.id" class="order-card">
+                    <p><strong>Order ID:</strong> {{ order.id }}</p>
+                    <p><strong>Table:</strong> {{ order.table_id }}</p>
+                    <p><strong>Total:</strong> ${{ order.total_price.toFixed(2) }}</p>
+                    <ul>
+                        <li v-for="item in order.items">{{ item.description }} x{{ item.quantity }}</li>
+                    </ul>
+                    <form :action="'/mark_done/' + order.id" method="POST">
+                        <button type="submit" class="done-button">Mark as Done</button>
+                    </form>
+                </div>
+                {% endraw %}
+            </div>
+        </div>
+    
+    <footer>
+        <p>All rights reserved.</p>
+    </footer>
+
+</body>
+<script>
+    const { createApp } = Vue; // get the createApp function from the Vue
+    
+    createApp({
+        data() {
+            return {
+                orders: []
+            }
+        },
+        methods: {
+            fetchOrders() {
+                fetch('/kitchen/orders/json')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.orders = data;
+                    })
+                    .catch(err => console.error("Fetch error:", err));
+            }
+        },
+        mounted() {// runs once when the page finishes loading
+            this.fetchOrders(); // initial order patch
+            setInterval(this.fetchOrders, 2000); // update the orders 
+        }
+    }).mount('#app');
+
+
+    </script>
+    
+</html>
