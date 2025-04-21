@@ -32,12 +32,17 @@
             margin-top: 10px;
         }
 
+        .actions form {
+            display: inline;
+        }
+
         .actions button {
-            padding: 5px 12px;
+            padding: 6px 14px;
             margin-right: 10px;
             background-color: #444;
             color: white;
             border: none;
+            border-radius: 3px;
             cursor: pointer;
         }
 
@@ -57,12 +62,16 @@
             <p><strong>Dates:</strong> {{ req.request_start.date() }} to {{ req.request_end.date() }}</p>
             <p><strong>Status:</strong> {{ req.status }}</p>
             <div class="actions">
-                <button>Approve</button>
-                <button>Deny</button>
+                <form method="post" action="{{ url_for('manager.approve_request', request_id=req.id) }}">
+                    <button type="submit">Approve</button>
+                </form>
+                <form method="post" action="{{ url_for('manager.deny_request', request_id=req.id) }}">
+                    <button type="submit">Deny</button>
+                </form>
             </div>
         </div>
         {% else %}
-        <p>No requests found.</p>
+        <p style="text-align:center;">No requests found.</p>
         {% endfor %}
     </div>
 </body>
