@@ -2,7 +2,10 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.config import Config
+from flask_socketio import SocketIO
 
+
+socketio = SocketIO(cors_allowed_origins="*") #I need to rsetrict this later
 db = SQLAlchemy()
 
 def create_app():
@@ -11,8 +14,8 @@ def create_app():
                 template_folder=os.path.abspath('templates'),
                 static_folder=os.path.abspath('static'))
     app.config.from_object(Config)
-
-    db.init_app(app)
+    socketio.init_app(app)   
+    db.init_app(app) # link the db 
     from app.routes.reservations_routes import reservations_bp
     from app.routes.notifications_routes import notifications_bp
     from app.routes.manager_routes import manager_bp

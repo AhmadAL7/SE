@@ -45,7 +45,7 @@ class Customer(db.Model):
     supports = db.relationship('Support', backref='customer', lazy=True)
 
 class TableModel(db.Model):
-    __tablename__ = 'tables'
+    __tablename__ = 'tables' # use this name not the tablemodel in the database
     id = db.Column(db.Integer, primary_key=True)
     table_number = db.Column(db.Integer, unique=True, nullable=False)
     seats = db.Column(db.Integer, nullable=False)

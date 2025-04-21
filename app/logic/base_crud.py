@@ -22,6 +22,10 @@ class BaseCRUD:
         return model.query.filter_by(**kwargs).first() #  get a single row based on the kwargs
     
     @staticmethod
+    def get_all_records_by_filter(model, **kwargs):
+        return model.query.filter_by(**kwargs).all() # get all rows based on the kwargs
+    
+    @staticmethod
     def update(model, id, **kwargs):
         record = model.query.get(id) # get the record by id
         if record:
