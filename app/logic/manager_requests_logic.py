@@ -6,8 +6,8 @@ from datetime import datetime
 class ManagerRequestLogic(BaseCRUD):
 
     @staticmethod
-    def get_all_requests():
-        return BaseCRUD.get_all(RequestTimeOff)
+    def get_pending_requests():
+        return RequestTimeOff.query.filter_by(status='Pending').all()
 
     @staticmethod
     def update_request_status(request_id, new_status):
@@ -18,7 +18,7 @@ class ManagerRequestLogic(BaseCRUD):
         request.status = new_status
         db.session.commit()
 
-        # Add a notification to manager
+        # Add a notification
         notification = Notification(
             message=f"Request {request.id} has been {new_status.lower()}",
             role="Manager",
@@ -28,3 +28,15 @@ class ManagerRequestLogic(BaseCRUD):
         db.session.commit()
 
         return True, "Status updated"
+
+    @staticmethod
+    def create_time_off_request(form_data):
+        new_request = RequestTimeOff(
+            staff_id=form_data.get("staff_id"),
+            reason=form_data.get("reason"),
+            request_start=datetime.strptime(form_data.get("start_date"), "%Y-%m-%d"),
+            request_end=datetime.strptime(form_data.get("end_date"), "%Y-%m-%d"),
+            status="Pending"
+        )
+        db.session.add(new_request)
+        db.session.commit()
