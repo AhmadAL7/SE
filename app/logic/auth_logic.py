@@ -73,4 +73,8 @@ class AuthLogic(BaseCRUD):
     def change_password(id, new_password):
         return BaseCRUD.update(User, id, password = new_password)
     
-            
+    @staticmethod
+    def delete_account(user_id):
+
+        BaseCRUD.delete(User, user_id)
+        return True

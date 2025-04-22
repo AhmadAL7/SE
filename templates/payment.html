@@ -13,13 +13,14 @@
             <p><strong>Order ID:</strong> {{ order_id }}</p>
             <ul>
                 {% for item in menu_items %}
-                    <li>{{ item.menu.description }} x{{ item.quantity }} - ${{ item.menu.price * item.quantity }}</li>
+                <li>{{ item.Item_name }} x{{ item.quantity }} - ${{ item.price * item.quantity }}</li>
+
                 {% endfor %}
             </ul>
             <p class="total"><strong>Total:</strong> ${{ total_price }}</p>
         </div>
 
-        <form method="POST" action="{{ url_for('order.process_payment', order_id=order_id) }}">
+        <form method="POST" action="{{ url_for('payment.process_payment', table_id=table_id) }}">
             <label for="amount">Enter Payment Amount:</label>
             <input type="number" name="amount" id="amount" step="0.01" required>
             {% if error %}

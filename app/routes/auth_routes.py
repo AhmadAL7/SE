@@ -87,4 +87,31 @@ def get_profile():
  
     return render_template('profile.html',  user_data=user, staff_data=staff_data)
 
+@auth_bp.route('/delete_account', methods=['POST'])
+def delete_account():
+    username = session.get('username')
+    
+    # If user is logged in
+    if username:
+        user_id = AuthLogic.get_user_record(username).id
+        
+        # Only delete if user exists
+        if user_id:
+            AuthLogic.delete_account(user_id)
+            session.clear()
+            
+            return redirect(url_for('auth.sign_in'))
+        
+        else:
+            print("User not found. Unable to delete account.", "error")
+            return redirect(url_for('auth.get_profile'))
 
+    # If user is somehow not logged in
+    print("user not in session")
+    return redirect(url_for('auth.get_profile'))
+# logout 
+@auth_bp.route('/logout')
+def logout():
+    session.clear()
+    flash("You have been logged out.", "info")
+    return redirect(url_for('auth.sign_in'))

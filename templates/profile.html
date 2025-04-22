@@ -53,6 +53,11 @@
                 {{ 'Update' if staff_data else 'Create' }} Profile
             </button>
         </form>
+        
+        <form method="POST" action="{{ url_for('auth.delete_account') }}" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+            <button type="submit" class="danger-button">Delete My Account</button>
+        </form>
+
     </div>
 </body>
 

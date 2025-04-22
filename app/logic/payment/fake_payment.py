@@ -10,7 +10,7 @@ payment_bp = Blueprint('payment', __name__)
 class FakePaymentStrategy(StrategyInterface):
     
     def pay(self, order_id, amount):
-        from app.logic.models import Payment, Order
+        from app.models import Payment, Order
         order = BaseCRUD.get_row(Order, id=order_id)
 
         if not order:
@@ -36,7 +36,8 @@ class FakePaymentStrategy(StrategyInterface):
             payment_date=datetime.now(timezone.utc)
         )
         
-        change = round(amount - total_price, 2)
+        change = round(float(amount) - float(total_price), 2)
+
         
         return {
             "status": "Success",
