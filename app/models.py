@@ -4,9 +4,11 @@ from app import db
 
 
 role_permissions = db.Table('role_permissions',
+
     db.Column('id', db.Integer, primary_key=True, autoincrement=True),  # Auto-incrementing primary key
     db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
-    db.Column('permission_id', db.Integer, db.ForeignKey('permission.id'))
+    db.Column('permission_id', db.Integer, db.ForeignKey('permission.id')),
+
 )
 
 class Role(db.Model):
@@ -24,7 +26,8 @@ class User(db.Model):
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
-    staff = db.relationship('Staff', backref='user', lazy=True, uselist=False)
+    staff = db.relationship('Staff', backref='user', lazy=True, uselist=False, cascade="all, delete")
+
 
 class Staff(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,6 +37,8 @@ class Staff(db.Model):
     email = db.Column(db.String(255))
     hire_date = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    schedules = db.relationship('StaffSchedule', backref='staff', cascade="all, delete", lazy=True)
+    requests = db.relationship('RequestTimeOff', backref='staff', cascade="all, delete", lazy=True)
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)

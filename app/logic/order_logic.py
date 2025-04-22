@@ -9,7 +9,7 @@ class OrderLogic(BaseCRUD):
     def __init__(self, tabel_id):
         self.table_id = tabel_id  # set the table id
         self.order = BaseCRUD.get_row(Order, table_id= self.table_id)  # get the order
-        if not self.order: # iof it doesnt exists createa  new one and assign it order name
+        if not self.order: # if it doesnt exists createa  new one and assign it order name
             from datetime import datetime
             BaseCRUD.create(Order, table_id=self.table_id, order_date=datetime.now(), status='In Progress', total_price=0.0, payment_status='Pending')
             self.order = BaseCRUD.get_row(Order, table_id=self.table_id)
@@ -87,3 +87,6 @@ class OrderLogic(BaseCRUD):
 
         self.update_total_price()
         return True
+    
+    def get_order_by_table_id(self):
+        return BaseCRUD.get_row(Order, table_id=self.table_id)

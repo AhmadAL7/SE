@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from app.logic.order_logic import OrderLogic
 from app.logic.payment.processor import PaymentProcessor
 from app.logic.payment.fake_payment import FakePaymentStrategy
@@ -11,12 +11,14 @@ def process_payment(table_id): ### work on processing the payment pass the table
     logic = OrderLogic(table_id)
     
     order = logic.get_order_details()
+    order_id = order["order_id"]
     table = logic.get_table_by_id()
     total_price = order["total_price"]
 
+
     if request.method == 'POST':
         amount = float(request.form['amount'])
-        processor = PaymentProcessor(FakePaymentStrategy())
+        processor = PaymentProcessor(FakePaymentStrategy()) # context 
 
         try:
             result = processor.process_payment(order_id, amount)
@@ -27,6 +29,7 @@ def process_payment(table_id): ### work on processing the payment pass the table
                                    total_price=total_price,
                                    menu_items=order["all_items"],
                                    order_id=order_id,
+                                   table_id=table_id,
                                    table_number=table.table_number)
 
         if result["status"] == "Failed":
@@ -35,18 +38,14 @@ def process_payment(table_id): ### work on processing the payment pass the table
                                    table_number=table.table_number,
                                    menu_items=order["all_items"],
                                    total_price=total_price,
+                                  table_id=table_id,
                                    error=result["message"])
 
-        return render_template('payment.html',
-                               order_id=order_id,
-                               table_number=table.table_number,
-                               menu_items=order["all_items"],
-                               total_price=total_price,
-                               change=result["change"],
-                               success=result["message"])
+        return redirect(url_for('payment.payment_tables'))
 
     return render_template('payment.html',
                            order_id=order_id,
+                           table_id=table_id,
                            table_number=table.table_number,
                            menu_items=order["all_items"],
                            total_price=total_price)
