@@ -1,5 +1,6 @@
 from app.models import Reservation, TableModel, Customer
 from app.logic.base_crud import BaseCRUD
+from app.logic.reservation_factory import ReservationFactory
 from app import db
 from datetime import datetime
 
@@ -51,23 +52,19 @@ class ReservationLogic(BaseCRUD):
         if existing_booking:
             raise ValueError("You already have a reservation at this time.")
 
-        # ✅ Find available table
-        suitable_tables = TableModel.query.filter(TableModel.seats >= guests).all()
-        for table in suitable_tables:
-            conflict = Reservation.query.filter_by(
-                reservation_time=reservation_datetime,
-                table_id=table.id
-            ).first()
-            if not conflict:
-                return BaseCRUD.create(
-                    Reservation,
-                    customer_id=customer.id,
-                    reservation_time=reservation_datetime,
-                    number_of_people=guests,
-                    table_id=table.id
-                )
+        # ✅ Use the factory to create the reservation instance
+        reservation = ReservationFactory.create_reservation(
+            customer_id=customer.id,
+            reservation_time=reservation_datetime,
+            guests=guests
+        )
 
-        raise ValueError("No available tables for that time and guest count.")
+        if not reservation:
+            raise ValueError("No available tables for that time and guest count.")
+
+        db.session.add(reservation)
+        db.session.commit()
+        return reservation
 
     @staticmethod
     def get_all_reservations():

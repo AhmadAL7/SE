@@ -1,17 +1,19 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from app.config import Config
 from flask_socketio import SocketIO
+
+# Use default config unless overridden by test
+from app.config import Config
 
 socketio = SocketIO(cors_allowed_origins="*")  # TODO: restrict for production
 db = SQLAlchemy()
 
-def create_app():
+def create_app(config_class=Config):  # ✅ Accept external config (for tests)
     app = Flask(__name__,
                 template_folder=os.path.abspath('templates'),
                 static_folder=os.path.abspath('static'))
-    app.config.from_object(Config)
+    app.config.from_object(config_class)  # ✅ Use passed config
 
     socketio.init_app(app)
     db.init_app(app)
@@ -29,7 +31,7 @@ def create_app():
     app.register_blueprint(payment_bp)
     app.register_blueprint(reservations_bp)
     app.register_blueprint(notifications_bp)
-    app.register_blueprint(manager_bp, url_prefix="/manager")  # ✅ Prefix fixed
+    app.register_blueprint(manager_bp, url_prefix="/manager")
     app.register_blueprint(menu_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(inventory_bp)
