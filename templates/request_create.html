@@ -1,0 +1,66 @@
+<!-- templates/request_create.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Time Off Request</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        form {
+            width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+        }
+
+        button {
+            margin-top: 15px;
+            background-color: #8B0000;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #a40000;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align:center;">New Time Off Request</h2>
+
+    <form method="POST">
+        <label for="staff_id">Staff ID:</label>
+        <input type="number" name="staff_id" required>
+
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" required>
+
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date" required>
+
+        <label for="reason">Reason:</label>
+        <textarea name="reason" rows="4" required></textarea>
+
+        <button type="submit">Submit Request</button>
+    </form>
+
+</body>
+</html>

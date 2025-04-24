@@ -1,3 +1,4 @@
+<!-- templates/requests_manager.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,10 +29,6 @@
             margin: 5px 0;
         }
 
-        .actions {
-            margin-top: 10px;
-        }
-
         .actions form {
             display: inline;
         }
@@ -49,10 +46,25 @@
         .actions button:hover {
             background-color: #666;
         }
+
+        .top-link {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .top-link a {
+            color: darkred;
+            font-weight: bold;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
     <h1>Manager Requests</h1>
+
+    <div class="top-link">
+        <a href="{{ url_for('manager.create_request') }}">+ Create New Request</a>
+    </div>
 
     <div class="request-container">
         {% for req in requests %}
@@ -71,7 +83,7 @@
             </div>
         </div>
         {% else %}
-        <p style="text-align:center;">No requests found.</p>
+        <p style="text-align:center;">No pending requests.</p>
         {% endfor %}
     </div>
 </body>
