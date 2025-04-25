@@ -3,6 +3,7 @@ from app.logic.base_crud import BaseCRUD
 from app.logic.reservation_factory import ReservationFactory
 from app import db
 from datetime import datetime
+from datetime import timedelta
 
 class ReservationLogic(BaseCRUD):
     def __init__(self):
@@ -21,6 +22,13 @@ class ReservationLogic(BaseCRUD):
 
         reservation_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
 
+
+        now = datetime.now()
+        if reservation_datetime <= now:
+            raise ValueError("Reservation must be for a future time.")
+
+        if reservation_datetime - now < timedelta(hours=24):
+            raise ValueError("Reservations must be made at least 24 hours in advance.")
         # Parse name into first and last
         parts = name.strip().split()
         first_name = parts[0]
@@ -44,7 +52,7 @@ class ReservationLogic(BaseCRUD):
             db.session.add(customer)
             db.session.commit()
 
-        # ❌ Block if same customer already booked at this time
+        #  Block if same customer already booked at this time
         existing_booking = Reservation.query.filter_by(
             customer_id=customer.id,
             reservation_time=reservation_datetime
@@ -52,7 +60,7 @@ class ReservationLogic(BaseCRUD):
         if existing_booking:
             raise ValueError("You already have a reservation at this time.")
 
-        # ✅ Use the factory to create the reservation instance
+        # Use the factory to create the reservation instance
         reservation = ReservationFactory.create_reservation(
             customer_id=customer.id,
             reservation_time=reservation_datetime,
@@ -60,7 +68,7 @@ class ReservationLogic(BaseCRUD):
         )
 
         if not reservation:
-            raise ValueError("No available tables for that time and guest count.")
+            raise ValueError("No available tables for that time or guest count.")
 
         db.session.add(reservation)
         db.session.commit()

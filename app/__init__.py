@@ -2,13 +2,21 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO
-
+from sqlalchemy import Engine
+from sqlalchemy import event 
 # Use default config unless overridden by test
 from app.config import Config
 
 socketio = SocketIO(cors_allowed_origins="*")  # TODO: restrict for production
 db = SQLAlchemy()
 
+#enforce foriegn key constraints
+@event.listens_for(Engine, "connect")
+def enforce_foreign_keys(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+    
 def create_app(config_class=Config):  # ✅ Accept external config (for tests)
     app = Flask(__name__,
                 template_folder=os.path.abspath('templates'),

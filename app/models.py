@@ -132,3 +132,5 @@ class Notification(db.Model):
     message = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(50), nullable=False)  # 'FOH', 'BOH', or 'Manager'
     timestamp = db.Column(db.DateTime)
+    staff_id = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=True)
+    staff = db.relationship('Staff', backref='notifications')

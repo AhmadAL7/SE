@@ -38,9 +38,9 @@ class AuthLogic(BaseCRUD):
         return BaseCRUD.get_row(User, username = username)
     
     @staticmethod
-    def get_staff_record(username):
+    def get_staff_record(user_id):
         
-        return BaseCRUD.get_row(Staff, user_id = username)
+        return BaseCRUD.get_row(Staff, user_id = user_id)
     
 
     @staticmethod
@@ -78,3 +78,5 @@ class AuthLogic(BaseCRUD):
 
         BaseCRUD.delete(User, user_id)
         return True
+    
+    

@@ -1,4 +1,5 @@
 
+from operator import and_, or_
 from app import db
 
 class BaseCRUD:
@@ -44,3 +45,21 @@ class BaseCRUD:
             db.session.commit()
             return True
         return False
+    
+    @staticmethod
+    def get_records_by_date_range(model, column, start_date=None, end_date=None, **kwargs):
+        query = model.query.filter_by(**kwargs) # build up the query only no data is returned 
+        if start_date:
+            query = query.filter(column >= start_date) # apply additional filters
+        if end_date:
+            query = query.filter(column <= end_date)
+        return query.all() # get the data
+    
+@staticmethod
+def get_staff_sensitive_notifications(model, staff_id, role_name):
+    return model.query.filter(
+        or_(
+            model.staff_id == staff_id,
+            and_(model.staff_id == None, model.role == role_name)
+        )
+    ).order_by(model.timestamp.desc()).all()
