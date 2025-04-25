@@ -1,7 +1,7 @@
 from app.models import RequestTimeOff, Notification
 from app import db
 from app.logic.base_crud import BaseCRUD
-from datetime import datetime
+from datetime import datetime, timezone
 
 class ManagerRequestLogic(BaseCRUD):
 
@@ -18,21 +18,28 @@ class ManagerRequestLogic(BaseCRUD):
         request.status = new_status
         db.session.commit()
 
-        # Add a notification
+        # Get staff who submitted the request
+        staff = request.staff  # uses backref='staff' in RequestTimeOff model
+        user = staff.user if staff else None
+        role_name = user.role.role_name if user and user.role else "Unknown"
+
+        # Create notification for the requester
         notification = Notification(
-            message=f"Request {request.id} has been {new_status.lower()}",
-            role="Manager",
-            timestamp=datetime.utcnow()
+            message=f"Your time off request #{request.id} has been {new_status.lower()}",
+            role=role_name,                     
+            staff_id=staff.id,                  
+            timestamp=datetime.now(timezone.utc)
         )
+
         db.session.add(notification)
         db.session.commit()
 
         return True, "Status updated"
 
     @staticmethod
-    def create_time_off_request(form_data):
+    def create_time_off_request(form_data, staff_id):
         new_request = RequestTimeOff(
-            staff_id=form_data.get("staff_id"),
+            staff_id=staff_id,
             reason=form_data.get("reason"),
             request_start=datetime.strptime(form_data.get("start_date"), "%Y-%m-%d"),
             request_end=datetime.strptime(form_data.get("end_date"), "%Y-%m-%d"),

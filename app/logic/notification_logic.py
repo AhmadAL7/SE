@@ -1,5 +1,5 @@
 # app/logic/notification_logic.py
-from app.models import Notification
+from app.models import Notification, Role
 from app.logic.base_crud import BaseCRUD
 
 class NotificationLogic(BaseCRUD):
@@ -7,5 +7,10 @@ class NotificationLogic(BaseCRUD):
         pass
 
     @staticmethod
-    def get_all_notifications():
-        return BaseCRUD.get_all(Notification)
+    def get_notifications_for_staff_and_role(staff_id, role_name):
+
+        return BaseCRUD.get_staff_sensitive_notifications(Notification, staff_id, role_name)
+    
+    @staticmethod
+    def get_role(role_id):
+        return BaseCRUD.get_by_id(Role, role_id)

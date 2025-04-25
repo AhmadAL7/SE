@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Schedule</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/schedule.css') }}">
+</head>
+<body>
+    <h1>My Schedule</h1>
+    <form method="GET">
+        <input name="start" type="datetime-local">
+        <input name="end" type="datetime-local">
+        <button type="submit">Filter</button>
+    </form>
+    {% if schedules %}
+        <table border="1">
+            <tr>
+                <th>Shift Start</th>
+                <th>Shift End</th>
+            </tr>
+            {% for s in schedules %}
+            <tr>
+                <td>{{ s.shift_start.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ s.shift_end.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No schedules available.</p>
+    {% endif %}
+</body>
+</html>

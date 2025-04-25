@@ -22,6 +22,7 @@ def sign_in():
             # add user id and username in the session
             session['user_id'] = user.id   
             session['username'] = user.username
+            session['role_id'] = user.role_id
             flash('Login successful!', 'success')
             return redirect(url_for('menu.menu'))
         else:
