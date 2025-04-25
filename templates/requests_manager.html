@@ -1,4 +1,3 @@
-<!-- templates/requests_manager.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,10 +51,22 @@
             margin-bottom: 20px;
         }
 
-        .top-link a {
-            color: darkred;
-            font-weight: bold;
-            text-decoration: none;
+        .top-link a, .top-link form {
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .top-link button {
+            padding: 6px 14px;
+            background-color: darkgreen;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .top-link button:hover {
+            background-color: green;
         }
     </style>
 </head>
@@ -64,6 +75,11 @@
 
     <div class="top-link">
         <a href="{{ url_for('manager.create_request') }}">+ Create New Request</a>
+
+        <!-- NEW BUTTON TO TRIGGER REMINDERS -->
+        <form method="post" action="{{ url_for('manager.trigger_reminders') }}">
+            <button type="submit">Send Reservation Reminders</button>
+        </form>
     </div>
 
     <div class="request-container">
