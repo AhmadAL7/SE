@@ -1,9 +1,10 @@
 from app.models import Reservation, TableModel, Customer
 from app.logic.base_crud import BaseCRUD
 from app.logic.reservation_factory import ReservationFactory
+from app.utils.email_helper import send_email
 from app import db
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
+import pytz
 
 class ReservationLogic(BaseCRUD):
     def __init__(self):
@@ -22,19 +23,20 @@ class ReservationLogic(BaseCRUD):
 
         reservation_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
 
+        # Apply BST timezone
+        local_tz = pytz.timezone("Europe/London")
+        reservation_datetime = local_tz.localize(reservation_datetime)
+        now = datetime.now(local_tz)
 
-        now = datetime.now()
         if reservation_datetime <= now:
             raise ValueError("Reservation must be for a future time.")
-
         if reservation_datetime - now < timedelta(hours=24):
             raise ValueError("Reservations must be made at least 24 hours in advance.")
-        # Parse name into first and last
+
         parts = name.strip().split()
         first_name = parts[0]
         last_name = parts[1] if len(parts) > 1 else ""
 
-        # Match full identity
         customer = Customer.query.filter_by(
             first_name=first_name,
             last_name=last_name,
@@ -52,7 +54,6 @@ class ReservationLogic(BaseCRUD):
             db.session.add(customer)
             db.session.commit()
 
-        #  Block if same customer already booked at this time
         existing_booking = Reservation.query.filter_by(
             customer_id=customer.id,
             reservation_time=reservation_datetime
@@ -60,7 +61,6 @@ class ReservationLogic(BaseCRUD):
         if existing_booking:
             raise ValueError("You already have a reservation at this time.")
 
-        # Use the factory to create the reservation instance
         reservation = ReservationFactory.create_reservation(
             customer_id=customer.id,
             reservation_time=reservation_datetime,
@@ -72,6 +72,21 @@ class ReservationLogic(BaseCRUD):
 
         db.session.add(reservation)
         db.session.commit()
+
+        # ✅ Send confirmation email
+        try:
+            send_email(
+                to_email=customer.email,
+                subject="Reservation Confirmed",
+                message_body=(
+                    f"Dear {customer.first_name},\n\n"
+                    f"Your reservation has been confirmed for {reservation_datetime.strftime('%Y-%m-%d at %H:%M')} "
+                    f"for {guests} guest(s).\n\nThank you!"
+                )
+            )
+        except Exception as e:
+            print(f"[EMAIL ERROR] Failed to send confirmation email: {e}")
+
         return reservation
 
     @staticmethod
@@ -80,7 +95,8 @@ class ReservationLogic(BaseCRUD):
 
     @staticmethod
     def get_all_reservations_with_customer():
-        return db.session.query(Reservation, Customer).join(Customer, Reservation.customer_id == Customer.id).all()
+        return db.session.query(Reservation, Customer)\
+            .join(Customer, Reservation.customer_id == Customer.id).all()
 
     @staticmethod
     def get_reservation_by_id(reservation_id):
@@ -97,6 +113,9 @@ class ReservationLogic(BaseCRUD):
             new_date = form_data.get('date')
             new_time = form_data.get('time')
             new_datetime = datetime.strptime(f"{new_date} {new_time}", "%Y-%m-%d %H:%M")
+
+            local_tz = pytz.timezone("Europe/London")
+            new_datetime = local_tz.localize(new_datetime)
 
             new_first_name = form_data.get('first_name')
             new_last_name = form_data.get('last_name')

@@ -23,3 +23,5 @@ Flask-socketio==5.3.6
 Eventlet==0.39.1
 python-socketio==5.8.0
 python-engineio==4.9.0
+python-dotenv==1.0.1
+pytz==2024.1

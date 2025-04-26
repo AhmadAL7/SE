@@ -1,14 +1,10 @@
-# app/models.py
+from datetime import datetime
 from app import db
 
-
-
 role_permissions = db.Table('role_permissions',
-
-    db.Column('id', db.Integer, primary_key=True, autoincrement=True),  # Auto-incrementing primary key
+    db.Column('id', db.Integer, primary_key=True, autoincrement=True),
     db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
     db.Column('permission_id', db.Integer, db.ForeignKey('permission.id')),
-
 )
 
 class Role(db.Model):
@@ -27,7 +23,6 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     staff = db.relationship('Staff', backref='user', lazy=True, uselist=False, cascade="all, delete")
-
 
 class Staff(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -50,11 +45,12 @@ class Customer(db.Model):
     supports = db.relationship('Support', backref='customer', lazy=True)
 
 class TableModel(db.Model):
-    __tablename__ = 'tables' # use this name not the tablemodel in the database
+    __tablename__ = 'tables'
     id = db.Column(db.Integer, primary_key=True)
     table_number = db.Column(db.Integer, unique=True, nullable=False)
     seats = db.Column(db.Integer, nullable=False)
     orders = db.relationship("Order", backref="table")
+
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
@@ -104,7 +100,6 @@ class OrderMenuItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     menu = db.relationship('MenuItem', backref='order_links')
 
-
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
@@ -126,11 +121,19 @@ class StaffSchedule(db.Model):
     shift_start = db.Column(db.DateTime)
     shift_end = db.Column(db.DateTime)
 
-
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.String(50), nullable=False)  # 'FOH', 'BOH', or 'Manager'
+    role = db.Column(db.String(50), nullable=False)
     timestamp = db.Column(db.DateTime)
     staff_id = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=True)
     staff = db.relationship('Staff', backref='notifications')
+
+class ReminderLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    reservation_id = db.Column(db.Integer, db.ForeignKey('reservation.id'))
+    sent_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    customer = db.relationship("Customer", backref="reminder_logs")
+    reservation = db.relationship("Reservation", backref="reminder_logs")
