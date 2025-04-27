@@ -11,8 +11,8 @@ class ReservationFactoryTestCase(unittest.TestCase):
     def setUp(self):
         # Pass test config into app factory
         self.app = create_app(TestConfig)
-        self.app_context = self.app.app_context()
-        self.app_context.push()
+        self.app_context = self.app.app_context() # craete app context that stay on unlesss popped
+        self.app_context.push() # activate context
         db.create_all()
 
         # Add dummy data

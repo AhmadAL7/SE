@@ -1,10 +1,13 @@
-from app import create_app, db
-app = create_app()
-app.app_context().push()
+import os
 
-# Drop all tables
-db.drop_all()
+DB_FILE = 'restaurant.db'
 
-db.metadata.clear()
+def drop_database():
+    if os.path.exists(DB_FILE):
+        os.remove(DB_FILE)
+        print(f"Database {DB_FILE} deleted successfully.")
+    else:
+        print(f"Database {DB_FILE} does not exist.")
 
-
+if __name__ == "__main__":
+    drop_database()

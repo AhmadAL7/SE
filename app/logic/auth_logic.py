@@ -75,7 +75,10 @@ class AuthLogic(BaseCRUD):
     
     @staticmethod
     def delete_account(user_id):
-
+        staff= BaseCRUD.get_all_records_by_filter(Staff, user_id = user_id)
+        if staff:
+            staff_id = staff[0].id 
+            BaseCRUD.delete(Staff,staff_id)
         BaseCRUD.delete(User, user_id)
         return True
     
