@@ -73,7 +73,7 @@ class ReservationLogic(BaseCRUD):
         db.session.add(reservation)
         db.session.commit()
 
-        # ✅ Send confirmation email
+        # send confirmation email
         try:
             send_email(
                 to_email=customer.email,

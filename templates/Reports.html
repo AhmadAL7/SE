@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a></li>
+            <li><a href="{{ url_for('manager.create_schedule') }}">Manage Schedules</a></li>
+            <li><a href="{{ url_for('inventory.inventory') }}">Inventory</a></li>
+            <li><a href="{{ url_for('manager.manager_reports') }}">Reports</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h2>Inventory Usage Report</h2>
+        <table>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+            </tr>
+            {% for item in inventory_usage %}
+            <tr>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.used_quantity }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% if inventory_usage %}
+        <form action="{{ url_for('manager.download_inventory_usage_csv') }}" method="get">
+            <button type="submit">Download Inventory Usage (CSV)</button>
+        </form>
+        {% endif %} 
+        <h2>Low Stock Items</h2>
+        <table>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+            </tr>
+            {% for item in low_stock_items %}
+            <tr>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.quantity }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="2">No low stock items!</td></tr>
+            {% endfor %}
+        </table>
+        {% if low_stock_items %}
+        <form action="{{ url_for('manager.download_low_inventory_csv') }}" method="get">
+            <button type="submit">Download Low Stock Items (CSV)</button>
+        </form>
+        {% endif %}
+    </section>
+
+    <footer>
+        <p>All rights reserved.</p>
+    </footer>
+</body>
+</html>

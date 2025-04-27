@@ -1,10 +1,14 @@
 from flask import Blueprint, render_template, redirect, session, url_for, request
+from app.logic.Inventory import InventoryLogic
 from app.logic.manager_requests_logic import ManagerRequestLogic
 from datetime import datetime
 from app.models import Staff, StaffSchedule
 from app.logic.schedules import Schedule
 from app.logic.auth_logic import AuthLogic
-from send_reservation_reminders import send_reminders  # ✅ NEW: Reminder logic
+
+import csv
+from app.logic.reservation_remind import Reservation_reminders
+from flask import Response
 
 manager_bp = Blueprint('manager', __name__)
 
@@ -43,10 +47,10 @@ def create_request():
     return render_template('request_create.html')
 
 
-# ✅ NEW: Trigger reminders manually from dashboard
+#  Trigger reminders manually from dashboard
 @manager_bp.route('/send_reminders', methods=['POST'])
 def trigger_reminders():
-    send_reminders()
+    Reservation_reminders.send_reminders()
     return redirect(url_for('manager.requests_manager'))
 
 # Schedule creation
@@ -104,3 +108,46 @@ def view_staff_schedules():
 def delete_schedule(schedule_id):
     Schedule.delete_schedule(schedule_id)
     return redirect(url_for('manager.view_staff_schedules'))
+
+
+# Reports page
+@manager_bp.route('/reports')
+def manager_reports():
+    inventory_usage = InventoryLogic.get_all_inventory_items()
+    low_stock_items = InventoryLogic.get_low_stock_items(threshold=5)
+    return render_template('reports.html', inventory_usage=inventory_usage, low_stock_items=low_stock_items)
+
+
+
+
+@manager_bp.route('/download_inventory_usage_csv')
+def download_inventory_usage_csv():
+    inventory_items = InventoryLogic.get_all_inventory_items()
+
+    # Prepare CSV output
+    def generate():
+        data = [["Item Name", "Quantity", "Used Quantity"]]
+        for item in inventory_items:
+            data.append([item.item_name, item.quantity, item.used_quantity])
+
+        # Convert to CSV format
+        for row in data:
+            yield  ','.join(map(str, row)) + '\n' # turn into string each item in a row then join them (add new line between rows)
+
+    #  response to retun the csv file , tell the browser to download not shoe, set name
+    return Response(generate(), mimetype='text/csv',
+                    headers={"Content-Disposition": "attachment;filename=inventory_usage_report.csv"})
+
+@manager_bp.route('/download_low_inventory_csv')
+def download_low_inventory_csv():
+    low_inventory_items = InventoryLogic.get_low_stock_items()
+    def generate():
+         data = [["Item Name", "Quantity", "Supplier"]]
+         for  item in low_inventory_items:
+              data.append([item.item_name, item.quantity, item.supplier.name])
+              
+         for row in data:
+             yield  ','.join(map(str,row)) + '\n' 
+         
+    
+    return Response(generate(), mimetype='text/csv', headers = {"Content-disposition": "attachment;filename=low_inventory_report.csv"})

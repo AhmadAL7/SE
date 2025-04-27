@@ -7,7 +7,7 @@ from sqlalchemy import event
 # Use default config unless overridden by test
 from app.config import Config
 
-socketio = SocketIO(cors_allowed_origins="*")  # TODO: restrict for production
+socketio = SocketIO(cors_allowed_origins="*")  #  restrict for production
 db = SQLAlchemy()
 
 #enforce foriegn key constraints
@@ -17,11 +17,11 @@ def enforce_foreign_keys(dbapi_connection, connection_record):
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
     
-def create_app(config_class=Config):  # ✅ Accept external config (for tests)
+def create_app(config_class=Config):  # Accept external config (for tests)
     app = Flask(__name__,
                 template_folder=os.path.abspath('templates'),
                 static_folder=os.path.abspath('static'))
-    app.config.from_object(config_class)  # ✅ Use passed config
+    app.config.from_object(config_class)  # Use passed config
 
     socketio.init_app(app)
     db.init_app(app)

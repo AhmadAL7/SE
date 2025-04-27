@@ -14,13 +14,13 @@ def menu():
 @menu_bp.route('/menu/add', methods=['GET', 'POST'])
 def add_menu_item():
     if request.method == 'POST':
-        inventory_id = request.form.get('inventory_id')
+
         description = request.form.get('description')
         price = float(request.form.get('price'))
 
-        MenuLogic.add_menu_item(price, description,inventory_id)
+        MenuLogic.add_menu_item(price, description)
         return redirect(url_for('menu.menu'))  # Redirect back to the menu page after adding item.
 
     # GET method - show form
     inventories = InventoryLogic.get_all_inventory_items() # Get all inventory items
-    return render_template('menu_add.html', inventories=inventories)  # Render the form with inventories
+    return render_template('menu_add.html')  # Render the form with inventories

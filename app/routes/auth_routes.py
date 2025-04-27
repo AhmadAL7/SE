@@ -62,7 +62,7 @@ def get_profile():
     user = AuthLogic.get_user_record(username)
     staff_data = user.staff  # using relationship in models
     if request.method == 'POST':
-        # if staff exists
+        # if staff exists, update
         if staff_data:
             new_password = request.form['password']
             if new_password:
@@ -76,15 +76,16 @@ def get_profile():
                 email=request.form['email']
             )
             return redirect(url_for('auth.get_profile'))
-        # add record for staff
-        AuthLogic.add_staff(
-        first_name=request.form['first_name'],
-        last_name=request.form['last_name'],
-        phone_number=request.form['phone_number'],
-        email=request.form['email'],
-        user_id = user_id
-        )  
-
+        else:
+            # add record for staff
+            AuthLogic.add_staff(
+            first_name=request.form['first_name'],
+            last_name=request.form['last_name'],
+            phone_number=request.form['phone_number'],
+            email=request.form['email'],
+            user_id = user_id)  
+            
+            return redirect(url_for('auth.get_profile'))
  
     return render_template('profile.html',  user_data=user, staff_data=staff_data)
 
@@ -104,7 +105,7 @@ def delete_account():
             return redirect(url_for('auth.sign_in'))
         
         else:
-            print("User not found. Unable to delete account.", "error")
+            flash("You are not logged in.", "error")
             return redirect(url_for('auth.get_profile'))
 
     # If user is somehow not logged in
