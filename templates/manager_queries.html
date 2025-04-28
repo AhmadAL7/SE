@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Queries</title>
+</head>
+<body>
+    <h1>Customer Inquiries</h1>
+
+    <table border="1">
+        <tr>
+            <th>Email</th>
+            <th>Inquiry Date</th>
+            <th>Message</th>
+           <th>date</th>
+        </tr>
+        {% for support in supports %}
+        <tr>
+            <td>{{ support.email }}</td>
+            <td>{{ support.inquiry_date }}</td>
+            <td>{{ support.inquiry_text }}</td>
+            <td>{{ support.inquiry_date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{{ url_for('auth.get_profile') }}">Back to Profile</a>
+</body>
+</html>

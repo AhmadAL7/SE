@@ -26,6 +26,10 @@ class BaseCRUD:
     def get_all_records_by_filter(model, **kwargs):
         return model.query.filter_by(**kwargs).all() # get all rows based on the kwargs
     
+    
+    @staticmethod
+    def get_first_record_by_filter(model, **kwargs):
+        return model.query.filter_by(**kwargs).first() # getone row based on the kwargs
     @staticmethod
     def update(model, id, **kwargs):
         record = model.query.get(id) # get the record by id
@@ -55,11 +59,11 @@ class BaseCRUD:
             query = query.filter(column <= end_date)
         return query.all() # get the data
     
-@staticmethod
-def get_staff_sensitive_notifications(model, staff_id, role_name):
-    return model.query.filter(
-        or_(
-            model.staff_id == staff_id,
-            and_(model.staff_id == None, model.role == role_name)
-        )
-    ).order_by(model.timestamp.desc()).all()
+    @staticmethod # get notification for either specific staff or for role based
+    def get_staff_sensitive_notifications(model, staff_id, role_name):
+        return model.query.filter(
+            or_(
+                model.staff_id == staff_id,
+                and_(model.staff_id == None, model.role == role_name)
+            )
+        ).order_by(model.timestamp.desc()).all()

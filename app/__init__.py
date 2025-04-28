@@ -35,7 +35,9 @@ def create_app(config_class=Config):  # Accept external config (for tests)
     from app.routes.inventory_routes import inventory_bp
     from app.routes.order_routes import order_bp
     from app.routes.payment_routes import payment_bp
-
+    from app.routes.support_routes import support_bp
+    
+    app.register_blueprint(support_bp)
     app.register_blueprint(payment_bp)
     app.register_blueprint(reservations_bp)
     app.register_blueprint(notifications_bp)
