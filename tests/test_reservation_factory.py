@@ -3,6 +3,7 @@
 import unittest
 from datetime import datetime
 from app import create_app, db
+from app.logic.base_crud import BaseCRUD
 from app.models import Customer, TableModel
 from app.logic.reservation_factory import ReservationFactory
 from tests.test_config import TestConfig
@@ -13,14 +14,21 @@ class ReservationFactoryTestCase(unittest.TestCase):
         self.app = create_app(TestConfig)
         self.app_context = self.app.app_context() # craete app context that stay on unlesss popped
         self.app_context.push() # activate context
-        db.create_all()
+        db.create_all() #create the models for temp db
 
         # Add dummy data
-        self.customer = Customer(first_name="Test", last_name="User", email="test@example.com", phone_number="1234567890")
-        self.table = TableModel(table_number=101, seats=4)
-
-        db.session.add_all([self.customer, self.table])
-        db.session.commit()
+        self.customer = BaseCRUD.create(
+            Customer,
+            first_name="Test",
+            last_name="User",
+            email="test@example.com",
+            phone_number="1234567890"
+        )
+        self.table = BaseCRUD.create(
+            TableModel,
+            table_number=101,
+            seats=4
+        )
 
     def tearDown(self):
         db.session.remove()

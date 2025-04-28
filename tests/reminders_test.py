@@ -1,83 +1,58 @@
-# dummy_data/add_dummy_reservation.py
 
+# tests/test_dummy_reservation_unittest.py
+
+import unittest
 from datetime import datetime, timedelta
-import pytz
-from app import db, create_app
+from app import create_app, db
 from app.models import Customer, Reservation, TableModel, ReminderLog
 from app.logic.reservation_remind import Reservation_reminders
+from app.logic.base_crud import BaseCRUD
+from tests.test_config import TestConfig
 
-app = create_app()
+class DummyReservationTestCase(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app(TestConfig)
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
 
-def add_dummy_reservation():
-    local_tz = pytz.timezone('Europe/London')
-    now = datetime.now(local_tz)
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
 
-    # Delete old ReminderLogs first
-    old_reminders = ReminderLog.query.join(Customer).filter(Customer.email == "dummytester@example.com").all()
-    for reminder in old_reminders:
-        db.session.delete(reminder)
-    db.session.commit()
-    print("Old dummy reminder logs deleted.")
+    def test_dummy_reservation_flow(self):
+        now = datetime.now()
 
-    # Delete old dummy reservation
-    dummy_customer = Customer.query.filter_by(email="dummytester@example.com").first()
-    if dummy_customer:
-        old_reservations = Reservation.query.filter_by(customer_id=dummy_customer.id).all()
-        for res in old_reservations:
-            db.session.delete(res)
-        db.session.delete(dummy_customer)
-        db.session.commit()
-        print("Old dummy reservations and customer deleted.")
- 
-    
-    # Check if table already exists adn delete it 
-    dummy_table = TableModel.query.filter_by(table_number=9999).first()
-    if dummy_table:
-        db.session.delete(dummy_table)
-        db.session.commit()
-        print("Old dummy table deleted.")
+        # Create dummy table
+        table = BaseCRUD.create(TableModel, table_number=9999, seats=4)
 
+        # Create dummy customer
+        customer = BaseCRUD.create(
+            Customer,
+            first_name="Dummy",
+            last_name="Tester",
+            email="dummytester@example.com",
+            phone_number="123456789"
+        )
 
+        # Create dummy reservation
+        reservation_time = now + timedelta(hours=23, minutes=45)
+        reservation = BaseCRUD.create(
+            Reservation,
+            customer_id=customer.id,
+            reservation_time=reservation_time,
+            number_of_people=2,
+            table_id=table.id
+        )
 
-    # Create table
-    table = TableModel(table_number=9999, seats=4)
-    db.session.add(table)
-    db.session.commit()
-    print("Dummy table created.")
-    
-    # Create customer
-    customer = Customer(
-        first_name="Dummy",
-        last_name="Tester",
-        email="dummytester@example.com",
-        phone_number="123456789")
-    db.session.add(customer)
-    db.session.commit()
-    print("Dummy customer created.")
+        # Send reminders
+        Reservation_reminders.send_reminders()
 
-    # Create  reservation
-    reservation_time = now + timedelta(hours=23, minutes=45)
-    reservation = Reservation(
-        customer_id=customer.id,
-        reservation_time=reservation_time,
-        number_of_people=2,
-        table_id=table.id)
-    db.session.add(reservation)
-    db.session.commit()
-    print(f"Dummy reservation created at {reservation_time}.")
+        # Check ReminderLog
+        reminder = BaseCRUD.get_row(ReminderLog, customer_id=customer.id, reservation_id=reservation.id)
 
+        self.assertIsNotNone(reminder, "ReminderLog was not created.")
 
-
-    #tests
-    print("Running send_reminders() test...")
-    Reservation_reminders.send_reminders()
-
-    # Check if ReminderLog was created
-    reminder = ReminderLog.query.filter_by(customer_id=customer.id, reservation_id=reservation.id).first()
-    if reminder:
-        print("ReminderLog created successfully.")
-    else:
-        print("ReminderLog NOT created.")
-if __name__ == "__main__":
-    with app.app_context():
-        add_dummy_reservation()
+if __name__ == '__main__':
+    unittest.main()
