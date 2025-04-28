@@ -88,7 +88,7 @@ with app.app_context():
     db.session.commit()
 
     # Create Support inquiries
-    support1 = Support(customer_id=customer1.id, inquiry_date=datetime(2025, 5, 5), inquiry_text="Can I change my table?")
+    support1 = Support(email="john33.doe@email.com", inquiry_date=datetime(2025, 5, 5), inquiry_text="Can I change my table?")
     db.session.add(support1)
     db.session.commit()
 

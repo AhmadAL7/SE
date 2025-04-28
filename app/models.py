@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from app import db
 
 role_permissions = db.Table('role_permissions',
@@ -40,10 +40,9 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255))
-    phone_number = db.Column(db.String(15))
+    email = db.Column(db.String(255), nullable=False)
+    phone_number = db.Column(db.String(15), nullable=False)
     reservations = db.relationship('Reservation', backref='customer', lazy=True)
-    supports = db.relationship('Support', backref='customer', lazy=True)
     reminder_logs = db.relationship('ReminderLog', backref='customer', lazy=True)
 
 class TableModel(db.Model):
@@ -64,7 +63,7 @@ class Reservation(db.Model):
 
 class Support(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id', ondelete="RESTRICT"), nullable=False)
+    email = db.Column(db.String(255),nullable=False )
     inquiry_date = db.Column(db.DateTime)
     inquiry_text = db.Column(db.Text)
 
@@ -136,4 +135,15 @@ class ReminderLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id', ondelete="RESTRICT"), nullable=False)
     reservation_id = db.Column(db.Integer, db.ForeignKey('reservation.id', ondelete="CASCADE"), nullable=False)
-    sent_at = db.Column(db.DateTime, default=datetime.utcnow)
+    sent_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    
+    
+class ClockInOut(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    staff_id = db.Column(db.Integer, db.ForeignKey('staff.id', ondelete="CASCADE"), nullable=False)
+    clock_in_time = db.Column(db.DateTime, nullable=False)
+    clock_out_time = db.Column(db.DateTime, nullable=True)
+    total_hours = db.Column(db.Float, nullable=True)
+
+    staff = db.relationship('Staff', backref='clock_in_out_records')
+    

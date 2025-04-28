@@ -26,6 +26,7 @@
     
     <div class="staff-form-container">
         <form action="{{ url_for('auth.get_profile') }}" method="POST" class="staff-form">
+
             <!-- First Name -->
             <label for="first_name">First Name:</label>
             <input type="text" name="first_name" id="first_name" value="{{ staff_data.first_name if staff_data else '' }}" required><br>
@@ -57,7 +58,28 @@
         <form method="POST" action="{{ url_for('auth.delete_account') }}" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
             <button type="submit" class="danger-button">Delete My Account</button>
         </form>
+        <!-- tracking hours-->
+        <form method="GET" action="{{ url_for('auth.get_profile') }}">
 
+            <label>Start Date:</label>
+            <input type="datetime-local" name="start">
+        
+            <label>End Date:</label>
+            <input type="datetime-local" name="end">
+        
+            <button type="submit">View hours</button>
+        </form>
+        
+        {% if hours %}
+            <table border="1">
+                <tr>
+                    <th>Total Hours</th>
+                </tr>
+                <tr>
+                    <td>{{ hours }}</td>
+                </tr>
+            </table>
+        {% endif %}
     </div>
 </body>
 
