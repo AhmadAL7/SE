@@ -1,4 +1,4 @@
-# app/utils/email_helper.py
+
 
 import smtplib
 from email.mime.text import MIMEText
@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 
 def send_email(to, subject, body):
     sender_email = "restaurantremindertest@gmail.com"
-    app_password = "zmsmgnoancpigprx"  # 16-char Gmail App Password
+    app_password = "zmsmgnoancpigprx"  # gmail App Password
 
     # Create the email
     msg = MIMEMultipart()
@@ -18,8 +18,8 @@ def send_email(to, subject, body):
 
     try:
         # Connect to Gmail SMTP server
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
+        server = smtplib.SMTP('smtp.gmail.com', 587) 
+        server.starttls()  # start encrypted connections
         server.login(sender_email, app_password)
         server.send_message(msg)
         server.quit()
