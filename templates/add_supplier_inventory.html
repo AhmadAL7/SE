@@ -3,8 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Supplier and Inventory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body>
+    <nav>
+        <div class="nav-container">
+            <div class="burger" id="burger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="{{ url_for('reservations.reservations_creation') }}">Create Reservation</a>
+                <a href="{{ url_for('support.support_page') }}">Customer Support</a>
+                <a href="{{ url_for('menu.menu') }}">Menu</a>
+    
+                {% if not session.get('username') %}
+                    <a href="{{ url_for('auth.sign_in') }}">Sign in</a>
+                {% else %}
+                    <a href="{{ url_for('reservations.reservations_foh') }}">View Reservations (FOH)</a>
+                    <a href="{{ url_for('notifications.notifications') }}">Notifications</a>
+                    <a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a>
+                    <a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a>
+                    <a href="{{ url_for('support.view_queries') }}">Manager: View Queries</a>
+                    <a href="{{ url_for('inventory.add_supplier_inventory') }}">Supplier/Inventory</a>
+                    <a href="{{ url_for('manager.get_my_schedule') }}">Schedule</a>
+                    <a href="{{ url_for('manager.view_staff_schedules') }}">Manage Schedules</a>
+                    <a href="{{ url_for('payment.payment_tables') }}">Table Payments</a>
+                    <a href="{{ url_for('manager.create_schedule') }}">Create Schedule</a>
+                    <a href="{{ url_for('manager.manager_reports') }}">Reports</a>
+                    <a href="{{ url_for('order.view_tables') }}">Tables</a>
+                    <a href="{{ url_for('inventory.inventory') }}">Inventory</a>
+                    <a href="{{ url_for('auth.get_profile') }}">Profile</a>
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+<section>
     <h2>Add New Supplier</h2>
     <form method="POST" action="{{ url_for('inventory.add_supplier_inventory') }}">
         <input type="hidden" name="form_type" value="supplier"> <!--to let the route get the form type-->
@@ -42,5 +79,9 @@
 
         <button type="submit">Add Inventory Item</button>
     </form>
+</section>
+    <footer>
+        <p>All rights reserved.</p>
+    </footer>
 </body>
 </html>

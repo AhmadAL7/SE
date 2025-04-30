@@ -3,74 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Requests (Manager)</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-        h1 {
-            text-align: center;
-            margin-top: 20px;
-            color: #8B0000;
-        }
-
-        .request-container {
-            width: 85%;
-            margin: 30px auto;
-        }
-
-        .request-card {
-            background-color: #f9f9f9;
-            border-left: 6px solid #333;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-        }
-
-        .request-card p {
-            margin: 5px 0;
-        }
-
-        .actions form {
-            display: inline;
-        }
-
-        .actions button {
-            padding: 6px 14px;
-            margin-right: 10px;
-            background-color: #444;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .actions button:hover {
-            background-color: #666;
-        }
-
-        .top-link {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .top-link a, .top-link form {
-            display: inline-block;
-            margin: 0 5px;
-        }
-
-        .top-link button {
-            padding: 6px 14px;
-            background-color: darkgreen;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .top-link button:hover {
-            background-color: green;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body>
+    <nav>
+        <div class="nav-container">
+            <div class="burger" id="burger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="{{ url_for('reservations.reservations_creation') }}">Create Reservation</a>
+                <a href="{{ url_for('support.support_page') }}">Customer Support</a>
+                <a href="{{ url_for('menu.menu') }}">Menu</a>
+    
+                {% if not session.get('username') %}
+                    <a href="{{ url_for('auth.sign_in') }}">Sign in</a>
+                {% else %}
+                    <a href="{{ url_for('reservations.reservations_foh') }}">View Reservations (FOH)</a>
+                    <a href="{{ url_for('notifications.notifications') }}">Notifications</a>
+                    <a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a>
+                    <a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a>
+                    <a href="{{ url_for('support.view_queries') }}">Manager: View Queries</a>
+                    <a href="{{ url_for('inventory.add_supplier_inventory') }}">Supplier/Inventory</a>
+                    <a href="{{ url_for('manager.get_my_schedule') }}">Schedule</a>
+                    <a href="{{ url_for('manager.view_staff_schedules') }}">Manage Schedules</a>
+                    <a href="{{ url_for('payment.payment_tables') }}">Table Payments</a>
+                    <a href="{{ url_for('manager.create_schedule') }}">Create Schedule</a>
+                    <a href="{{ url_for('manager.manager_reports') }}">Reports</a>
+                    <a href="{{ url_for('order.view_tables') }}">Tables</a>
+                    <a href="{{ url_for('inventory.inventory') }}">Inventory</a>
+                    <a href="{{ url_for('auth.get_profile') }}">Profile</a>
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <section>
     <h1>Manager Requests</h1>
 
     <div class="top-link">
@@ -102,5 +73,6 @@
         <p style="text-align:center;">No pending requests.</p>
         {% endfor %}
     </div>
+</section>
 </body>
 </html>
