@@ -1,7 +1,7 @@
 
 
 * {
-    box-sizing: border-box;
+    box-sizing: border-box; /* no overflow */
     margin: 0;
     padding: 0;
 }
@@ -31,11 +31,12 @@ nav {
     display: flex;
     justify-content:center;
     align-items: center;
+    font-size: 0.9em;
 }
 
 .nav-links {
     display: flex;
-    gap: 10px;
+    gap: 7px;
 }
 
 .nav-links a {
@@ -49,7 +50,7 @@ nav {
     background-color: #575757;
 }
 
-/* Burger Menu */
+/* Burger  */
 .burger {
     display: none;
     flex-direction: column;
@@ -63,17 +64,27 @@ nav {
     margin: 4px 0;
 }
 
-/* Content Layout */
+/* content  */
 .container, section {
     flex: 1;
     max-width: 900px;
     width: 100%;
-    margin: 120px auto 20px; /* account for fixed nav */
+    margin: 120px auto 20px; 
     padding: 20px;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
 
+}
+
+.auth-container{
+    flex: 1;
+    max-width: 900px;
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 /* Forms */
@@ -123,7 +134,7 @@ table th, table td {
     text-align: center;
 }
 
-/* Footer */
+/* footer */
 footer {
     text-align: center;
     padding: 20px;
@@ -132,12 +143,12 @@ footer {
     margin-top: auto;
 }
 
-/* Responsive Design */
+/* responsive */
 @media (max-width: 768px) {
     .burger {
         display: flex;
     }
-
+  /*hide the links when too small and later activate when active is on(button pressed)*/
     .nav-links {
         display: none;
         flex-direction: column;

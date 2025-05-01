@@ -11,10 +11,9 @@ def support_page():
 
         try:
             SupportLogic.create_support(email, inquiry_text)
-            flash("Your message has been sent!", "success")
-            return redirect(url_for('support.support_page'))
+            return render_template('support_form.html', success="Your message has been sent!")
         except ValueError as e:
-            flash(str(e), "error")
+            return render_template('support_form.html', error=str(e))
 
     return render_template('support_form.html')
 

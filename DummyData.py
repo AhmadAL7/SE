@@ -136,4 +136,4 @@ with app.app_context():
     db.session.add(timeoff1)
     db.session.commit()
 
-    print("Simple dummy data created successfully!")
+    print("dummy data created!")

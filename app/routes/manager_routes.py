@@ -118,8 +118,6 @@ def manager_reports():
     return render_template('reports.html', inventory_usage=inventory_usage, low_stock_items=low_stock_items)
 
 
-
-
 @manager_bp.route('/download_inventory_usage_csv')
 def download_inventory_usage_csv():
     inventory_items = InventoryLogic.get_all_inventory_items()

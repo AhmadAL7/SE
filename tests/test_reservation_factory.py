@@ -36,7 +36,7 @@ class ReservationFactoryTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def test_reservation_created_successfully(self):
-        reservation_time = datetime(2025, 5, 10, 18, 0)
+        reservation_time = datetime(2026, 5, 10, 18, 0)
         reservation = ReservationFactory.create_reservation(
             customer_id=self.customer.id,
             reservation_time=reservation_time,

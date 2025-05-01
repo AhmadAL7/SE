@@ -6,7 +6,7 @@ from app.logic.Inventory import InventoryLogic
 
 menu_bp = Blueprint('menu', __name__)
 
-@menu_bp.route('/')
+@menu_bp.route('/menu')
 def menu():
     menu_items = MenuLogic.get_all_menu_items()
     return render_template('menu.html', menu_items=menu_items)
