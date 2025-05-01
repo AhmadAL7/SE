@@ -27,8 +27,7 @@
             <input type="number" name="amount" step="0.01" required>
             {% if error %}
                 <p class="error">{{ error }}</p>
-            {% elif change %}
-                <p class="success">Change: ${{ change }}</p>
+
             {% endif %}
             <button type="submit">Process Payment</button>
         </form>

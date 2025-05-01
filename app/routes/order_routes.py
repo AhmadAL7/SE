@@ -58,9 +58,8 @@ def remove_order(table_id):
     
 @order_bp.route('/decrease/<int:table_id>/<int:menu_item_id>', methods=['POST'])
 def decrease_quantity(table_id, menu_item_id):
-    
-    logic = OrderLogic(table_id)
 
+    logic = OrderLogic(table_id)
     result = logic.decrease_quantity( menu_item_id, quantity=1)  
     
     if result == "deleted":

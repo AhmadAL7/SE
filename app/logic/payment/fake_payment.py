@@ -36,13 +36,12 @@ class FakePaymentStrategy(StrategyInterface):
             payment_date=datetime.now(timezone.utc)
         )
         
-        change = round(float(amount) - float(total_price), 2)
+
 
         
         return {
             "status": "Success",
             "order_id": order_id,
             "amount_paid": amount,
-            "change": change,
             "message": "Payment processed successfully (fake)"
         }

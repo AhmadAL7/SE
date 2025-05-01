@@ -11,12 +11,14 @@
     
     <div class="container">
         <h2>Select a Table</h2>
+        
         {% if tables %}
         <ul>
             {% for t in tables %}
-                <li>
+
+                <li >
                     Table {{ t.table_number }} – ${{ t.total_price }}
-                    <a href="{{ url_for('payment.process_payment', table_id=t.table_id) }}">View & Pay</a>
+                    <a class="btn" href="{{ url_for('payment.process_payment', table_id=t.table_id) }}">View & Pay</a>
                 </li>
             {% endfor %}
         </ul>
