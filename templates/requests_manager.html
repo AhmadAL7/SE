@@ -7,46 +7,11 @@
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="burger" id="burger">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <div class="nav-links" id="navLinks">
-                <a href="{{ url_for('reservations.reservations_creation') }}">Create Reservation</a>
-                <a href="{{ url_for('support.support_page') }}">Customer Support</a>
-                <a href="{{ url_for('menu.menu') }}">Menu</a>
-    
-                {% if not session.get('username') %}
-                    <a href="{{ url_for('auth.sign_in') }}">Sign in</a>
-                {% else %}
-                    <a href="{{ url_for('reservations.reservations_foh') }}">View Reservations (FOH)</a>
-                    <a href="{{ url_for('notifications.notifications') }}">Notifications</a>
-                    <a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a>
-                    <a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a>
-                    <a href="{{ url_for('support.view_queries') }}">Manager: View Queries</a>
-                    <a href="{{ url_for('inventory.add_supplier_inventory') }}">Supplier/Inventory</a>
-                    <a href="{{ url_for('manager.get_my_schedule') }}">Schedule</a>
-                    <a href="{{ url_for('manager.view_staff_schedules') }}">Manage Schedules</a>
-                    <a href="{{ url_for('payment.payment_tables') }}">Table Payments</a>
-                    <a href="{{ url_for('manager.create_schedule') }}">Create Schedule</a>
-                    <a href="{{ url_for('manager.manager_reports') }}">Reports</a>
-                    <a href="{{ url_for('order.view_tables') }}">Tables</a>
-                    <a href="{{ url_for('inventory.inventory') }}">Inventory</a>
-                    <a href="{{ url_for('auth.get_profile') }}">Profile</a>
-                    <a href="{{ url_for('auth.logout') }}">Logout</a>
-                {% endif %}
-            </div>
-        </div>
-    </nav>
+    {% include 'partials/nav.html' %}
     <section>
     <h1>Manager Requests</h1>
 
     <div class="top-link">
-        <a href="{{ url_for('manager.create_request') }}">+ Create New Request</a>
-
         <!-- NEW BUTTON TO TRIGGER REMINDERS -->
         <form method="post" action="{{ url_for('manager.trigger_reminders') }}">
             <button type="submit">Send Reservation Reminders</button>

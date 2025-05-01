@@ -8,22 +8,26 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/sign_in', methods=['GET', 'POST'])
 #  sign in 
 def sign_in():
-    # check if user already signed in 
-    if 'user_id' in session:
-        flash('You are already logged in!', 'info')
-        return redirect(url_for('menu.menu')) 
+    
+
+
     
     # handle form data
     if request.method == 'POST':
+            # check if user already signed in 
+        if 'user_id' in session:
+            flash('You are already logged in!', 'signin_info')
+            return redirect(url_for('auth.sign_in')) 
+        
         username = request.form['username']
         password = request.form['password']
         
-        # IP address check to allow only in restaurant login and prevent fake clock ins
+            # IP address check to allow only in restaurant login and prevent fake clock ins
         ip_address = request.remote_addr
         if not ip_address.startswith('1'): #can specified for deployment
-            flash("Login only allowed inside the restaurant network.", "error")
+            flash("Login only allowed inside the restaurant network.", "signin_error")
             return redirect(url_for('auth.sign_in'))
-        
+            
         # authorize the user's data       
         user = AuthLogic.authorize(username, password)
         if user:
@@ -31,6 +35,7 @@ def sign_in():
             session['user_id'] = user.id   
             session['username'] = user.username
             session['role_id'] = user.role_id
+            session['role_name'] = user.role.role_name
             
             # Check if this user is a Staff to initiate clock in
             staff = Schedule.get_staff_record(user_id=user.id)
@@ -38,10 +43,10 @@ def sign_in():
                 clock_in_record = Schedule.clock_in(staff.id)
                 session['clock_in_id'] = clock_in_record.id
             
-            flash('Login successful!', 'success')
+            flash('Login successful!', 'auth_info')
             return redirect(url_for('menu.menu'))
         else:
-            flash('Invalid username or password.', 'error')
+            flash('Invalid username or password.', 'signin_error')
             return redirect(url_for('auth.sign_in'))
     # view sign in page
     return render_template('sign_in.html')
@@ -50,8 +55,25 @@ def sign_in():
 #sign up 
 @auth_bp.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
+    
+
+    
     # form request
     if request.method == 'POST':
+        
+        # IP address check to allow only in restaurant login and prevent fake clock ins
+        ip_address = request.remote_addr
+        if not ip_address.startswith('1'): #can specified for deployment
+            flash("sign up only allowed inside the restaurant network.", "signup_error")
+            return redirect(url_for('auth.sign_in'))
+    
+        if 'user_id' not in session: 
+                flash("Manager needs to login", "signup_error")
+                return redirect(url_for('auth.sign_in'))
+        elif session.get('role_name') != 'Management':
+                flash("Only mangers can acccess this feature", "signup_error")
+                return redirect(url_for('auth.sign_in'))
+        # get form data    
         username = request.form['username']
         password = request.form['password']
         role_id = request.form['role_id']
@@ -59,7 +81,7 @@ def sign_up():
         #checck if user exists
         user_exists = AuthLogic.check_user(username)
         if user_exists:
-            flash('Username already taken. Please choose another one.', 'error')
+            flash('Username already taken. Please choose another one.', 'signup_error')
             return redirect(url_for('auth.sign_up'))
         # create user
         AuthLogic.create_user( username, encrypted_password , role_id)
@@ -111,9 +133,9 @@ def get_profile():
                 start_date = datetime.fromisoformat(start)
                 end_date = datetime.fromisoformat(end)
                 hours = Schedule.get_worked_hours_in_range(staff.id, start_date, end_date)
-                print(f"{hours}HOURSHOURSHOIURSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+                
             except ValueError:
-                flash("Invalid date format.", "error")
+                flash("Invalid date format.", "profile_error")
                 return redirect(url_for('auth.get_profile'))
 
     return render_template('profile.html', hours=hours, user_data = user, staff_data = staff)
@@ -136,11 +158,10 @@ def delete_account():
             return redirect(url_for('auth.sign_in'))
         
         else:
-            flash("You are not logged in.", "error")
+            flash("You are not logged in.", "profile_error")
             return redirect(url_for('auth.get_profile'))
 
     # If user is somehow not logged in
-    print("user not in session")
     return redirect(url_for('auth.get_profile'))
 # logout 
 @auth_bp.route('/logout')
@@ -155,11 +176,13 @@ def logout():
             try:
                Schedule.clock_out(staff.id)
             except ValueError as e:
-                flash("No clock_in record found")
+                flash("No clock_in record found", "logout_error")
     session.clear()
-    flash("You have been logged out.", "info")
+    flash("You have been logged out.", "logout_info")
     return redirect(url_for('auth.sign_in'))
 
+
+#tracking hours
 @auth_bp.route('/profile/tracking')
 def get_hours():
     username = session.get('username')

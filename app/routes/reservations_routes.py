@@ -16,7 +16,10 @@ def reservations_creation():
 @reservations_bp.route('/reservations/foh')
 def reservations_foh():
     reservations = ReservationLogic.get_all_reservations_with_customer()
-    return render_template('reservations_foh.html', reservations=reservations)
+    return render_template('reservations_foh.html', 
+                           reservations=reservations)
+
+
 
 @reservations_bp.route('/reservations/edit/<int:id>', methods=['GET', 'POST'])
 def edit_reservation(id):
@@ -27,11 +30,16 @@ def edit_reservation(id):
     if request.method == 'POST':
         updated_reservation, message = ReservationLogic.update_reservation_with_validation(id, request.form)
         if updated_reservation:
-            return render_template('reservations_edit.html', reservation=updated_reservation, message=message)
+            return render_template('reservations_edit.html', 
+                                   reservation=updated_reservation, 
+                                   message=message)
         else:
-            return render_template('reservations_edit.html', reservation=reservation, error=message)
+            return render_template('reservations_edit.html', 
+                                   reservation=reservation, 
+                                   error=message)
 
-    return render_template('reservations_edit.html', reservation=reservation)
+    return render_template('reservations_edit.html', 
+                           reservation=reservation)
 
 @reservations_bp.route('/reservations/cancel/<int:id>', methods=['POST'])
 def cancel_reservation(id):

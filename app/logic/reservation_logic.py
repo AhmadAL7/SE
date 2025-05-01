@@ -116,6 +116,19 @@ class ReservationLogic(BaseCRUD):
 
             local_tz = pytz.timezone("Europe/London")
             new_datetime = local_tz.localize(new_datetime)
+            now = datetime.now(local_tz)
+
+            # Validation 1:in the future
+            if new_datetime <= now:
+                return None, "Reservation must be in the future."
+
+            # validation 2:  24 hours ahead
+            if new_datetime - now < timedelta(hours=24):
+                return None, "Reservations must be made at least 24 hours in advance."
+
+            # validation 3: between 12:00 and 22:00
+            if not (datetime.strptime("12:00", "%H:%M").time() <= new_datetime.time() <= datetime.strptime("22:00", "%H:%M").time()):
+                return None, "Reservation must be between 12:00 and 22:00."
 
             new_first_name = form_data.get('first_name')
             new_last_name = form_data.get('last_name')
@@ -124,13 +137,26 @@ class ReservationLogic(BaseCRUD):
         except Exception:
             return None, "Invalid input."
 
+        # validation 4: Table capacity check
         table = TableModel.query.get(reservation.table_id)
         if table and new_guest_count > table.seats:
             return None, f"Table {table.table_number} can only seat {table.seats} guests."
+        # validation 5: resrvation conflict
+        if reservation.reservation_time != new_datetime:
+            
+            conflict = Reservation.query.filter(
+                Reservation.table_id == reservation.table_id,
+                Reservation.reservation_time == new_datetime
+            ).first()
+            
+            if conflict:
+                return None, "This table is already booked at the selected time."
 
+        # Update reservation fields
         reservation.number_of_people = new_guest_count
         reservation.reservation_time = new_datetime
 
+        # Update customer info
         if reservation.customer:
             reservation.customer.first_name = new_first_name
             reservation.customer.last_name = new_last_name
@@ -139,7 +165,8 @@ class ReservationLogic(BaseCRUD):
 
         db.session.commit()
         return reservation, "Reservation and customer updated successfully."
-
+    
+    
     @staticmethod
     def delete_reservation(reservation_id):
         reservation = Reservation.query.get(reservation_id)

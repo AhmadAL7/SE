@@ -1,0 +1,49 @@
+<nav>
+    <div class="nav-container">
+        <div class="burger" id="burger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="nav-links">
+            {% if not session.get('username') %}
+            <a href="{{ url_for('reservations.reservations_creation') }}">Create Reservation</a>
+            <a href="{{ url_for('support.support_page') }}">Customer Support</a>
+            <a href="{{ url_for('menu.menu') }}">Menu</a>
+            <a href="{{ url_for('auth.sign_in') }}">Sign in</a>
+            {% else %}
+            <!--all staff can access-->
+                <a href="{{ url_for('manager.get_my_schedule') }}">Schedule</a>
+                <a href="{{ url_for('auth.get_profile') }}">Profile</a>
+                <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+                         <!--FOH & Manager-->
+                    {% if session['role_name'] in ['FOH', 'Management'] %}
+                    <a href="{{ url_for('payment.payment_tables') }}">Payments</a>
+                    <a href="{{ url_for('reservations.reservations_foh') }}">View Reservations</a>
+                    <a href="{{ url_for('order.view_tables') }}">Create Order</a>
+                    <a href="{{ url_for('inventory.inventory') }}">Update Inventory</a>
+                    <a href="{{ url_for('inventory.add_supplier_inventory') }}">Add Supplier/Inventory</a>
+                    <a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a>
+                    
+                    {% endif %}
+                    {% if session['role_name'] in ['FOH', 'BOH'] %}
+                    <a href="{{ url_for('manager.create_request') }}">+ Create New Request</a>
+                    {% endif %}
+                    <!--BOH-->
+                    {% if session['role_name'] == 'BOH' %}
+                    <a href="{{ url_for('order.kitchen_view') }}">Kitchen View</a>
+                    {% endif %}
+                    <!--Manager-->
+                    {% if session['role_name'] == 'Management' %}
+                        <a href="{{ url_for('auth.sign_up') }}">register staff</a>
+                        <a href="{{ url_for('manager.requests_manager') }}">Manager Requests</a>
+                        <a href="{{ url_for('support.view_queries') }}">View Queries</a>
+                        <a href="{{ url_for('manager.view_staff_schedules') }}">Manage Schedules</a>
+                        <a href="{{ url_for('manager.create_schedule') }}">Create Schedule</a>
+                        <a href="{{ url_for('manager.manager_reports') }}">Reports</a>
+                    {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</nav>

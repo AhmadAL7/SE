@@ -1,13 +1,13 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_socketio import SocketIO
+
 from sqlalchemy import Engine
 from sqlalchemy import event 
 
 from app.config import Config
 
-socketio = SocketIO(cors_allowed_origins="*")  #  restrict for production
+
 db = SQLAlchemy()
 
 #enforce foriegn key constraints
@@ -23,7 +23,7 @@ def create_app(config_class=Config):  # Accept external config (for tests)
                 static_folder=os.path.abspath('static'))
     app.config.from_object(config_class)  # Use passed config
 
-    socketio.init_app(app)
+
     db.init_app(app)
 
     # Import and register blueprints
@@ -36,7 +36,9 @@ def create_app(config_class=Config):  # Accept external config (for tests)
     from app.routes.order_routes import order_bp
     from app.routes.payment_routes import payment_bp
     from app.routes.support_routes import support_bp
-    
+    from app.routes.home_routes import public_bp
+   
+    app.register_blueprint(public_bp)
     app.register_blueprint(support_bp)
     app.register_blueprint(payment_bp)
     app.register_blueprint(reservations_bp)

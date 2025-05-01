@@ -5,7 +5,7 @@ from app.logic.base_crud import BaseCRUD
 from app.models import TableModel
 from app.logic.menu_logic import MenuLogic
 from app.logic.kitchen import KitchenLogic
-from app import socketio
+
 from flask import jsonify 
 order_bp = Blueprint('order', __name__)
 

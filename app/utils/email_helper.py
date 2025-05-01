@@ -9,12 +9,12 @@ def send_email(to, subject, body):
     app_password = "zmsmgnoancpigprx"  # gmail App Password
 
     # Create the email
-    msg = MIMEMultipart()
+    msg = MIMEMultipart() # allow multiple parts
     msg['From'] = sender_email
     msg['To'] = to
     msg['Subject'] = subject
 
-    msg.attach(MIMEText(body, 'plain'))
+    msg.attach(MIMEText(body, 'plain')) # creat email object of type  text
 
     try:
         # Connect to Gmail SMTP server

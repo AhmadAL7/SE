@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+
+    {% include 'partials/nav.html' %}
+    <main class="container">
+        <section class="main">
+            <img src="{{ url_for('static', filename='images/restaurant.jpg') }}" alt="Restaurant">
+            <h1>Welcome to Our Restaurant</h1>
+            <p>Delicious food, cozy atmosphere, and friendly service — all in one place.</p>
+            <a href="{{ url_for('menu.menu') }}">
+                <button>View Menu</button>
+            </a>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>Dine In</h3>
+                <p>Relax and enjoy your meal in our comfortable seating area.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Fresh Ingredients</h3>
+                <p>We use only the freshest ingredients for every dish we serve.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>All rights reserved.</p>
+    </footer>
+</body>
+</html>

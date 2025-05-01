@@ -18,11 +18,11 @@ class KitchenLogic(BaseCRUD):
     @staticmethod
     def get_order_json():
         orders = KitchenLogic.get_kitchen_orders()
-        print("Fetched orders:", orders)
+ 
 
         results = []
         for order in orders:
-            print(f"Processing order: {order.id}")
+
             items = [{'description': item.menu.description, 'quantity': item.quantity}
                     for item in order.menu_items]
 
@@ -32,5 +32,5 @@ class KitchenLogic(BaseCRUD):
                 'table_id': order.table_id,
                 'items': items
             })
-        print("Final JSON:", results)
+
         return results
