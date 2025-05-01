@@ -45,8 +45,8 @@
         <form method="POST" action="{{ url_for('order.remove_order', table_id=table_id) }}" style="display: inline;">
             <button type="submit">Delete</button>
         </form>
-        <h4>Total: ${{ total_price }}</h4>
-        <h3>Add Menu Item</h3>
+        <h4 class="total">Total: ${{ total_price }}</h4>
+        <h3 class="add-item">Add Menu Item</h3>
         <form method="POST" action="{{ url_for('order.add_to_order', table_id=table_id) }}">
             <label for="menu_item_id">Select Item:</label>
             <select name="menu_item_id" required>

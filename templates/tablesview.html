@@ -15,7 +15,7 @@
 <h2>Select a Table</h2>
 <ul>
     {% for table in tables %}
-    <li><a href="{{ url_for('order.table_order', table_id=table.id) }}">Table {{ table.table_number }}</a></li>
+    <li><a class="btn" href="{{ url_for('order.table_order', table_id=table.id) }}">Table {{ table.table_number }}</a></li>
     {% endfor %}
 </ul>
 

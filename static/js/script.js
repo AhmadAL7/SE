@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const navLinks = document.querySelector('.nav-links');
     if (burger && navLinks) {
         burger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+            navLinks.classList.toggle('active'); // adds active class and css displays it 
         });
     }
 });
