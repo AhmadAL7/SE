@@ -14,7 +14,7 @@ def send_email(to, subject, body):
     msg['To'] = to
     msg['Subject'] = subject
 
-    msg.attach(MIMEText(body, 'plain')) # creat email object of type  text
+    msg.attach(MIMEText(body, 'plain')) # create email object of type text
 
     try:
         # Connect to Gmail SMTP server

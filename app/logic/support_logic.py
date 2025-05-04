@@ -5,7 +5,7 @@ from app.models import Support
 
 
 class SupportLogic(BaseCRUD):
-    
+    # Create new support ticket
     @staticmethod
     def create_support(email, inquiry_text):
         if not email or not inquiry_text:
@@ -18,7 +18,7 @@ class SupportLogic(BaseCRUD):
             inquiry_text=inquiry_text
         )
         
-    
+    # Get all support tickets
     @staticmethod
     def get_all_supports():
         return BaseCRUD.get_all(Support)    

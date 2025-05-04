@@ -17,7 +17,7 @@ def view_tables():
     tables = OrderLogic.get_all_tables()
     return render_template('tablesview.html', tables=tables)
 
-# view order table
+# View current order for a table
 @order_bp.route('/table/<int:table_id>')
 def table_order(table_id):
     logic = OrderLogic(table_id)
@@ -33,9 +33,7 @@ def table_order(table_id):
     
     return render_template('order.html', order_id=order_id, menu_items=menu_items, table_number=table_number, table_id=table_id, all_menu_items = all_menu_items, total_price = total_price)
 
-
-
-
+# Add a menu item to a table's order
 @order_bp.route('/add_to_order/<int:table_id>', methods=['POST'])
 def add_to_order(table_id):
     logic = OrderLogic(table_id)
@@ -48,14 +46,14 @@ def add_to_order(table_id):
     total_price = logic.order.total_price 
     return redirect(url_for('order.table_order', table_id=table_id, total_price = total_price))
 
-
+# Remove an entire order for a table
 @order_bp.route('/remove_order/<int:table_id>', methods=['POST'])
 def remove_order(table_id):
     logic = OrderLogic(table_id)
 
     logic.remove_order()
     return redirect(url_for('order.view_tables', table_id=table_id)) # send to the tables page after removal
-    
+ # Decrease quantity of a specific item   
 @order_bp.route('/decrease/<int:table_id>/<int:menu_item_id>', methods=['POST'])
 def decrease_quantity(table_id, menu_item_id):
 
@@ -68,20 +66,21 @@ def decrease_quantity(table_id, menu_item_id):
         
     return redirect(url_for('order.table_order', table_id=table_id))
 
-#Kichen
+# Kitchen view showing all orders in progress
 @order_bp.route('/kitchen')
 def kitchen_view():
     from app.models import Order
     orders = KitchenLogic.get_kitchen_orders()
     return render_template('kitchen.html', orders=orders)
 
-
+# Mark an order as completed
 @order_bp.route('/mark_done/<int:order_id>', methods=['POST'])
 def mark_order_done(order_id):
     KitchenLogic.mark_order_done(order_id)
 
     return redirect(url_for('order.kitchen_view'))
 
+# JSON API for kitchen orders (used for JS page updates)
 @order_bp.route('/kitchen/orders/json')
 def kitchen_orders_json():
     details = KitchenLogic.get_order_json()

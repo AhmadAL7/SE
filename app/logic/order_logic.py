@@ -9,7 +9,7 @@ class OrderLogic(BaseCRUD):
     def __init__(self, tabel_id):
         self.table_id = tabel_id  # set the table id
         self.order = BaseCRUD.get_row(Order, table_id= self.table_id, payment_status = "Pending")  # get the order
-        if not self.order: # if it doesnt exists createa  new one and assign it order name
+        if not self.order: # if it doesnt exists create a new one and assign it order name
             from datetime import datetime
             BaseCRUD.create(Order, table_id=self.table_id, order_date=datetime.now(), status='In Progress', total_price=0.0, payment_status='Pending')
             self.order = BaseCRUD.get_row(Order, table_id=self.table_id, payment_status = "Pending")
@@ -60,15 +60,14 @@ class OrderLogic(BaseCRUD):
         BaseCRUD.update(Order, self.order.id, total_price=total) # update the total price of the order in the order model
         self.order.total_price = total  # updating the local reference of order (in case of useing it in the routes)
         return total
-    
+        # Remove entire order and items
     def remove_order(self):
         for item in self.order.menu_items: # go through all the items relating to the order in the OrderMenuItem model and delete them
             BaseCRUD.delete(OrderMenuItem, item.id)
         BaseCRUD.delete(Order, self.order.id) # delete the order record
         return True
 
-    
-
+      # Decrease item quantity or remove it
     def decrease_quantity(self, menu_item_id, quantity):
         item = BaseCRUD.get_row(OrderMenuItem, order_id=self.order.id, menu_item_id=menu_item_id) # get the item from the ordermenuitem model
         if not item:
@@ -79,7 +78,8 @@ class OrderLogic(BaseCRUD):
             BaseCRUD.update(OrderMenuItem, item.id, quantity=new_quantity) # update the quantity in the ordermenuitem model
         else:
             BaseCRUD.delete(OrderMenuItem, item.id) # delete if the quantity is 0
-
+            
+# Delete order if no items remain
         remaining_items = BaseCRUD.get_row(OrderMenuItem, order_id= self.order.id)
         if not remaining_items:
             BaseCRUD.delete(Order, self.order.id)
@@ -88,5 +88,6 @@ class OrderLogic(BaseCRUD):
         self.update_total_price()
         return True
     
+    # Get current order
     def get_order_by_table_id(self):
         return BaseCRUD.get_row(Order, table_id=self.table_id)

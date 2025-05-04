@@ -7,6 +7,7 @@ class Reservation_reminders(BaseCRUD):
 
     @staticmethod
     def send_reminders():
+        # Get reservations happening in 24h +- 30min
         now = datetime.now()
         start = now + timedelta(hours=23, minutes=30)
         end = now + timedelta(hours=24, minutes=30)

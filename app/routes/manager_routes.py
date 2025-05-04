@@ -65,7 +65,7 @@ def create_schedule():
 
     staff = Schedule.get_staff()
     return render_template('schedule_creation.html', staff_members=staff)
-
+# Logged in staff views their own work schedule
 @manager_bp.route('/view_schedule')
 def get_my_schedule():
     user_id = session.get('user_id')
@@ -75,7 +75,8 @@ def get_my_schedule():
     staff_id = Schedule.get_staff_by_user_id(user_id)[0].id
     start_str = request.args.get('start')
     end_str = request.args.get('end')
-
+   
+   # check if start and end are passed otherwise set to none to get all schedules
     try:
         start = datetime.fromisoformat(start_str) if start_str else None
         end = datetime.fromisoformat(end_str) if end_str else None
@@ -85,6 +86,7 @@ def get_my_schedule():
     schedules = Schedule.get_schedule(staff_id, start, end)
     return render_template('view_schedule.html', schedules=schedules)
 
+# Manager views any staff member's schedule
 @manager_bp.route('/manage_schedule')
 def view_staff_schedules():
     staff = Schedule.get_staff()
@@ -117,7 +119,7 @@ def manager_reports():
     low_stock_items = InventoryLogic.get_low_stock_items(threshold=5)
     return render_template('reports.html', inventory_usage=inventory_usage, low_stock_items=low_stock_items)
 
-
+# Download full inventory usage as a CSV file
 @manager_bp.route('/download_inventory_usage_csv')
 def download_inventory_usage_csv():
     inventory_items = InventoryLogic.get_all_inventory_items()
@@ -132,10 +134,11 @@ def download_inventory_usage_csv():
         for row in data:
             yield  ','.join(map(str, row)) + '\n' # turn into string each item in a row then join them (add new line between rows)
 
-    #  response to retun the csv file , tell the browser to download not shoe, set name
+    #  response to retun the csv file , tell the browser to download not show, set name
     return Response(generate(), mimetype='text/csv',
                     headers={"Content-Disposition": "attachment;filename=inventory_usage_report.csv"})
-
+    
+# Download only low stock items as a CSV file
 @manager_bp.route('/download_low_inventory_csv')
 def download_low_inventory_csv():
     low_inventory_items = InventoryLogic.get_low_stock_items()

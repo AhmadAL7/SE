@@ -3,6 +3,7 @@ from operator import and_, or_
 from app import db
 
 class BaseCRUD:
+    # Get all records from table
     @staticmethod
     def get_all(model):
         return model.query.all() # return all table content
@@ -40,7 +41,7 @@ class BaseCRUD:
             db.session.commit()
             return record
         return None
-
+    # Delete record by ID
     @staticmethod
     def delete(model, id):
         record = model.query.get(id)
@@ -49,7 +50,7 @@ class BaseCRUD:
             db.session.commit()
             return True
         return False
-    
+       # Get records within a date range
     @staticmethod
     def get_records_by_date_range(model, column, start_date=None, end_date=None, **kwargs):
         query = model.query.filter_by(**kwargs) # build up the query only no data is returned 

@@ -9,7 +9,7 @@ import pytz
 class ReservationLogic(BaseCRUD):
     def __init__(self):
         pass
-
+# Create a reservation with validation
     @staticmethod
     def create_reservation(form_data):
         name = form_data.get('name')
@@ -27,16 +27,17 @@ class ReservationLogic(BaseCRUD):
         local_tz = pytz.timezone("Europe/London")
         reservation_datetime = local_tz.localize(reservation_datetime)
         now = datetime.now(local_tz)
-
+        # Time validation
         if reservation_datetime <= now:
             raise ValueError("Reservation must be for a future time.")
         if reservation_datetime - now < timedelta(hours=24):
             raise ValueError("Reservations must be made at least 24 hours in advance.")
-
+        
+        # Split full name into first and last
         parts = name.strip().split()
         first_name = parts[0]
         last_name = parts[1] if len(parts) > 1 else ""
-
+       # Find or create customer 
         customer = Customer.query.filter_by(
             first_name=first_name,
             last_name=last_name,
@@ -53,14 +54,14 @@ class ReservationLogic(BaseCRUD):
             )
             db.session.add(customer)
             db.session.commit()
-
+         # Prevent duplicate reservations
         existing_booking = Reservation.query.filter_by(
             customer_id=customer.id,
             reservation_time=reservation_datetime
         ).first()
         if existing_booking:
             raise ValueError("You already have a reservation at this time.")
-
+       # Create reservation using factory
         reservation = ReservationFactory.create_reservation(
             customer_id=customer.id,
             reservation_time=reservation_datetime,
@@ -88,20 +89,20 @@ class ReservationLogic(BaseCRUD):
             print(f"[EMAIL ERROR] Failed to send confirmation email: {e}")
 
         return reservation
-
+# Get all reservations
     @staticmethod
     def get_all_reservations():
         return BaseCRUD.get_all(Reservation)
-
+# Get reservations with customer details
     @staticmethod
     def get_all_reservations_with_customer():
         return db.session.query(Reservation, Customer)\
             .join(Customer, Reservation.customer_id == Customer.id).all()
-
+# Get reservation by ID
     @staticmethod
     def get_reservation_by_id(reservation_id):
         return BaseCRUD.get_by_id(Reservation, reservation_id)
-
+# Update reservation with validation checks
     @staticmethod
     def update_reservation_with_validation(reservation_id, form_data):
         reservation = Reservation.query.get(reservation_id)
@@ -166,7 +167,7 @@ class ReservationLogic(BaseCRUD):
         db.session.commit()
         return reservation, "Reservation and customer updated successfully."
     
-    
+    # Delete reservation by ID
     @staticmethod
     def delete_reservation(reservation_id):
         reservation = Reservation.query.get(reservation_id)

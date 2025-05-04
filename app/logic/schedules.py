@@ -4,7 +4,7 @@ from app.models import Staff, StaffSchedule, ClockInOut
 
 class Schedule(BaseCRUD):
     
-    
+    # Add a shift
     @staticmethod
     def CreateSchedule(staff_id, shift_start, shift_end):
          BaseCRUD.create(StaffSchedule, staff_id = staff_id, shift_start = shift_start, shift_end = shift_end)
@@ -17,7 +17,7 @@ class Schedule(BaseCRUD):
     @staticmethod
     def get_staff_by_user_id(user_id):
         return BaseCRUD.get_all_records_by_filter(Staff, user_id = user_id)
-    
+    # Get staff schedule in a date range
     @staticmethod
     def get_schedule(staff_id, start, end):
         return BaseCRUD.get_records_by_date_range(StaffSchedule,StaffSchedule.shift_start,start_date = start, end_date = end, staff_id = staff_id )
@@ -25,14 +25,14 @@ class Schedule(BaseCRUD):
     @staticmethod
     def delete_schedule(schedule_id):
         return BaseCRUD.delete(StaffSchedule, schedule_id)
-    
+    # Clock-in a staff member
     @staticmethod
     def clock_in(staff_id):
         if not staff_id:
             raise ValueError("Staff ID is required for clock-in.")
         now = datetime.now(timezone.utc)
         return BaseCRUD.create(ClockInOut, staff_id = staff_id, clock_in_time = now)
-
+# Clock-out and calculate hours
     @staticmethod
     def clock_out(staff_id):
         if not staff_id:
@@ -49,9 +49,9 @@ class Schedule(BaseCRUD):
             ClockInOut,
             clock_in_record.id,
             clock_out_time=now,
-            total_hours=round(duration.total_seconds(), 2) # add /3600 for hours in deploymenet
+            total_hours=round(duration.total_seconds()/3600, 2) 
         )
-        
+        # Calculate total worked hours in range
     @staticmethod
     def get_worked_hours_in_range(staff_id, start_date, end_date):
         records = BaseCRUD.get_records_by_date_range(

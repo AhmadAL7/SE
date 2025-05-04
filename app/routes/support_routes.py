@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.logic.support_logic import SupportLogic
 
 support_bp = Blueprint('support', __name__)
-
+# view customer support form and create it 
 @support_bp.route('/support', methods=['GET', 'POST'])
 def support_page():
     if request.method == 'POST':
@@ -17,6 +17,7 @@ def support_page():
 
     return render_template('support_form.html')
 
+# View all customer support queries 
 @support_bp.route('/manager/queries')
 def view_queries():
     supports = SupportLogic.get_all_supports()
