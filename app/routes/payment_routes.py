@@ -31,7 +31,7 @@ def process_payment(table_id): ### work on processing the payment pass the table
                                    order_id=order_id,
                                    table_id=table_id,
                                    table_number=table.table_number)
-
+         # amount is not enough
         if result["status"] == "Failed":
             return render_template('payment.html',
                                    order_id=order_id,
@@ -40,7 +40,7 @@ def process_payment(table_id): ### work on processing the payment pass the table
                                    total_price=total_price,
                                   table_id=table_id,
                                    error=result["message"])
-
+        # payment is done
         return redirect(url_for('payment.payment_tables'))
 
     return render_template('payment.html',
@@ -49,7 +49,9 @@ def process_payment(table_id): ### work on processing the payment pass the table
                            table_number=table.table_number,
                            menu_items=order["all_items"],
                            total_price=total_price)
-    
+ 
+ 
+ # Show all unpaid tables 
 @payment_bp.route('/payment_tables')
 def payment_tables():
     tables = OrderLogic.get_all_tables()
@@ -65,5 +67,5 @@ def payment_tables():
                     "order_id": order.id,
                     "total_price": float(order.total_price)
                 })
-                break
+                break # stop checking for more unpaid orders for the current table
     return render_template('payment_tables.html', tables=table_orders)

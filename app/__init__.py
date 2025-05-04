@@ -10,13 +10,13 @@ from app.config import Config
 
 db = SQLAlchemy()
 
-#enforce foriegn key constraints
+#enforce foriegn key constraints for SQLite
 @event.listens_for(Engine, "connect")
 def enforce_foreign_keys(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor() 
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
-    
+  # Create and configure Flask app  
 def create_app(config_class=Config):  # Accept external config (for tests)
     app = Flask(__name__,
                 template_folder=os.path.abspath('templates'),
@@ -24,7 +24,7 @@ def create_app(config_class=Config):  # Accept external config (for tests)
     app.config.from_object(config_class)  # Use passed config
 
 
-    db.init_app(app)
+    db.init_app(app)# Bind SQLAlchemy
 
     # Import and register blueprints
     from app.routes.reservations_routes import reservations_bp

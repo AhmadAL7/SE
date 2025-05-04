@@ -4,11 +4,13 @@ from app.logic.base_crud import BaseCRUD
 from datetime import datetime, timezone
 
 class ManagerRequestLogic(BaseCRUD):
-
+    
+   # Get all pending time-off requests
     @staticmethod
     def get_pending_requests():
         return RequestTimeOff.query.filter_by(status='Pending').all()
-
+    
+# Approve or reject a request and notify staff
     @staticmethod
     def update_request_status(request_id, new_status):
         request = RequestTimeOff.query.get(request_id)
@@ -35,7 +37,8 @@ class ManagerRequestLogic(BaseCRUD):
         db.session.commit()
 
         return True, "Status updated"
-
+    
+# Submit a new time-off request
     @staticmethod
     def create_time_off_request(form_data, staff_id):
         new_request = RequestTimeOff(

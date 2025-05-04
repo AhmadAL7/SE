@@ -21,7 +21,7 @@
                     {% if session['role_name'] in ['FOH', 'Management'] %}
                     <a href="{{ url_for('payment.payment_tables') }}">Payments</a>
                     <a href="{{ url_for('reservations.reservations_foh') }}">View Reservations</a>
-                    <a href="{{ url_for('order.view_tables') }}">Create Order</a>
+                    <a href="{{ url_for('order.view_tables') }}">Orders</a>
                     <a href="{{ url_for('inventory.inventory') }}">Update Inventory</a>
                     <a href="{{ url_for('inventory.add_supplier_inventory') }}">Add Supplier/Inventory</a>
                     <a href="{{ url_for('menu.add_menu_item') }}">Add Menu Items</a>

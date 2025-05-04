@@ -4,12 +4,12 @@ from flask import render_template, request, redirect, url_for,Blueprint
 
 
 inventory_bp = Blueprint('inventory', __name__)
-
+# View inventory list
 @inventory_bp.route('/inventory', methods=['GET'])
 def inventory():
     inventory_items = InventoryLogic.get_all_inventory_items()
     return render_template('inventory.html', inventory_items=inventory_items)
-
+# Update inventory item
 @inventory_bp.route('/inventory/update/<int:item_id>', methods=['POST'])
 def update_inventory_item(item_id):
     item_name = request.form.get('item_name')
@@ -20,7 +20,7 @@ def update_inventory_item(item_id):
     return redirect(url_for('inventory.inventory'))
 
 
-# supplier
+# Add inventory or supplier
 @inventory_bp.route('/add_supplier_inventory', methods=['GET', 'POST'])
 def add_supplier_inventory():
     if request.method == 'POST':
@@ -43,7 +43,7 @@ def add_supplier_inventory():
     suppliers = InventoryLogic.get_all_suppliers()
     return render_template('add_supplier_inventory.html', suppliers=suppliers)
 
-
+# Delete inventory item
 @inventory_bp.route('/inventory/delete/<int:item_id>', methods=['POST'])
 def delete_inventory_item(item_id):
     InventoryLogic.delete_inventory_item(item_id)

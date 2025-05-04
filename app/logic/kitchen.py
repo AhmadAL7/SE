@@ -9,12 +9,12 @@ class KitchenLogic(BaseCRUD):
     def get_kitchen_orders():
         # Get only orders that are not marked as Done
         return BaseCRUD.get_all_records_by_filter(Order, status='In Progress')
-
+# Mark an order as done
     @staticmethod
     def mark_order_done(order_id):
         BaseCRUD.update(Order, order_id, status='Done')
-
-
+        
+# Return kitchen orders as JSON for the JS to use
     @staticmethod
     def get_order_json():
         orders = KitchenLogic.get_kitchen_orders()

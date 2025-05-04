@@ -1,8 +1,10 @@
 from app.models import Reservation, TableModel
 
 class ReservationFactory:
+
     @staticmethod
     def create_reservation(customer_id, reservation_time, guests):
+        # Find first available table that fits the guests and is not booked
         suitable_tables = TableModel.query.filter(TableModel.seats >= guests).all()
         for table in suitable_tables:
             conflict = Reservation.query.filter_by(
@@ -16,4 +18,4 @@ class ReservationFactory:
                     number_of_people=guests,
                     table_id=table.id
                 )
-        return None
+        return None  # No table available

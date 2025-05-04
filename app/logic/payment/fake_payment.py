@@ -17,7 +17,7 @@ class FakePaymentStrategy(StrategyInterface):
             raise ValueError("Order not found")
 
         
-        
+        #check if the amount is enough
         total_price = order.total_price
         if amount < total_price:
             return {
