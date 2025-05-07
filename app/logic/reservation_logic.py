@@ -147,7 +147,8 @@ class ReservationLogic(BaseCRUD):
             
             conflict = Reservation.query.filter(
                 Reservation.table_id == reservation.table_id,
-                Reservation.reservation_time == new_datetime
+                Reservation.reservation_time == new_datetime,
+                Reservation.id != reservation.id
             ).first()
             
             if conflict:

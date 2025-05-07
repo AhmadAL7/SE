@@ -13,6 +13,7 @@
             <a href="{{ url_for('auth.sign_in') }}">Sign in</a>
             {% else %}
             <!--all staff can access-->
+             <a href="{{ url_for('notifications.notifications') }}">Notifications</a>
                 <a href="{{ url_for('manager.get_my_schedule') }}">Schedule</a>
                 <a href="{{ url_for('auth.get_profile') }}">Profile</a>
                 <a href="{{ url_for('auth.logout') }}">Logout</a>
