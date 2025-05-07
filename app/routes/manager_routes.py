@@ -42,7 +42,7 @@ def create_request():
         if not staff:
             return "You're not registered as staff."
         ManagerRequestLogic.create_time_off_request(request.form, staff.id)
-        return redirect(url_for('manager.requests_manager'))
+        return redirect(url_for('manager.create_request'))
 
     return render_template('request_create.html')
 

@@ -8,7 +8,10 @@ inventory_bp = Blueprint('inventory', __name__)
 @inventory_bp.route('/inventory', methods=['GET'])
 def inventory():
     inventory_items = InventoryLogic.get_all_inventory_items()
+
     return render_template('inventory.html', inventory_items=inventory_items)
+
+
 # Update inventory item
 @inventory_bp.route('/inventory/update/<int:item_id>', methods=['POST'])
 def update_inventory_item(item_id):
